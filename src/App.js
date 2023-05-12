@@ -1,24 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Cards from "./components/Card/Card";
+import About from "./components/About/About";
+import Service from "./components/Service/Service";
+import Sidebar from "./components/Sidebar/Sidebar";
+import Employee from "./components/Employee/Employee";
+import { Box } from "@mui/material";
+// import other components that you want to render
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <Router>
+      <div>
+        <Sidebar />
+        <div
+          style={{
+            marginLeft: "244px",
+            marginTop: "108px",
+            marginRight: "3px",
+          }}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          <Routes>
+            <Route path="/" element={<Cards />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/service" element={<Service />} />
+            <Route path="/employee" element={<Employee />} />
+            {/* add more routes here */}
+          </Routes>
+        </div>
+      </div>
+    </Router>
   );
 }
 

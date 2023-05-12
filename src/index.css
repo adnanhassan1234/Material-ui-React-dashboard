@@ -5,9 +5,22 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #F6F7FF !important;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.MuiAppBar-colorPrimary {
+  color: #fff;
+  background-color: #1f34ad  !important;
+}
+/* .employee{
+  background-color: red;
+} */
+
+/* .css-1oqqzyl-MuiContainer-root {
+    max-width: 1088px !important;
+    margin-left: 250px !important;
+} */
