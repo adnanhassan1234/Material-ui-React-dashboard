@@ -10,25 +10,28 @@ import { Button, Container } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import { useState } from "react";
-import card1 from "../../assets/image/card1.jpg";
 import EmployeeCard from "./EmployeeCard";
-
-const cardData = [
-  {
-    id: 1,
-    image: card1,
-    name: "John Doe",
-    title: "Web Designer",
-  },
-];
+import cardData from "./CardData";
+import EmployeeTable from "./EmployeeTable";
 
 export default function Employee(props) {
   var classes = useStyles();
   const [designation, setDesignation] = useState("");
+  const [cardContent, setCardContent] = useState(cardData);
+  const [viewMode, setViewMode] = useState("grid");
+  
+
+  const handleViewModeChange = (mode) => {
+    setViewMode(mode);
+  };
 
   const handleDesignationChange = (event) => {
     setDesignation(event.target.value);
   };
+
+
+  const gridButtonClass = viewMode === "grid" ? "active" : "inactive";
+  const listButtonClass = viewMode === "list" ? "active" : "inactive";
 
   return (
     <>
@@ -48,8 +51,14 @@ export default function Employee(props) {
             </Grid>
             <Grid item sm={4}>
               <div className={classes.iconRight}>
-                <AppsIcon className={classes.space} />
-                <ListIcon className={classes.space} />
+                <AppsIcon
+                  className={`${classes.space} ${gridButtonClass}`}
+                  onClick={() => handleViewModeChange("grid")}
+                />
+                <ListIcon
+                className={`${classes.space} ${listButtonClass}`}
+                  onClick={() => handleViewModeChange("list")}
+                />
               </div>
             </Grid>
           </Grid>
@@ -123,16 +132,25 @@ export default function Employee(props) {
         </Container>
       </Box>
 
-      {/* ============= employee card ================ */}
-      <Box className="employee_card" sx={{ my: 4 }}>
-        <Container>
-          <Grid container spacing={3}>
-            {cardData?.map((content, ind) => {
-              return <EmployeeCard key={ind} {...content} />;
-            })}
-          </Grid>
-        </Container>
-      </Box>
+      {viewMode === "grid" ? (
+        <Box className="employee_card" sx={{ my: 2, pb:4 }}>
+          <Container>
+            <Grid container spacing={3}>
+              {cardContent?.map((content, ind) => {
+                return <EmployeeCard key={ind} {...content} />;
+              })}
+            </Grid>
+          </Container>
+        </Box>
+      ) : (
+        <Box className="employee_table" sx={{ pb:4 , mt:0 }}>
+          {/* <Container> */}
+            <Grid container>
+              <EmployeeTable cardContent={cardContent} />
+            </Grid>
+          {/* </Container> */}
+        </Box>
+      )}
     </>
   );
 }

@@ -5,7 +5,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #F6F7FF !important;
+  background-color: #F6F6F6 !important;
 }
 
 code {
@@ -16,11 +16,21 @@ code {
   color: #fff;
   background-color: #1f34ad  !important;
 }
-/* .employee{
-  background-color: red;
-} */
 
-/* .css-1oqqzyl-MuiContainer-root {
-    max-width: 1088px !important;
-    margin-left: 250px !important;
-} */
+.employee .active {
+  color: black;
+}
+
+.employee .inactive {
+ color: gray;
+}
+
+/* table header background color  */
+.css-gl260s-MuiDataGrid-columnHeadersInner {
+  background-color: white !important;
+}
+
+/* table even rows background color  */
+.MuiDataGrid-root .MuiDataGrid-row:nth-child(even) {
+  background-color: #ffffff !important; /* or any other color you want */
+}
