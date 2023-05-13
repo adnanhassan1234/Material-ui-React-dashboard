@@ -16,6 +16,8 @@ import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import CssBaseline from "@mui/material/CssBaseline";
+import { toggleState } from "../../features/DashboardSlice";
+import { useDispatch } from "react-redux";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -58,6 +60,8 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 function Navbar() {
+
+  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
 
@@ -155,6 +159,11 @@ function Navbar() {
       </MenuItem>
     </Menu>
   );
+
+
+  const changeDashboardView = () => {
+    dispatch(toggleState())
+  }
   return (
     <>
       <Box sx={{ display: "flex" }}>
@@ -167,15 +176,16 @@ function Navbar() {
             <AppBar>
               <Toolbar>
                 {/* bar icon */}
-                {/* <IconButton
+                <IconButton
                   size="large"
                   edge="start"
                   color="inherit"
                   aria-label="open drawer"
                   sx={{ mr: 2 }}
+                  onClickCapture={changeDashboardView}
                 >
                   <MenuIcon />
-                </IconButton> */}
+                </IconButton>
                 <Typography
                   variant="h6"
                   noWrap

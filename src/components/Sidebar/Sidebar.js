@@ -16,10 +16,14 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import Navbar from "../Navbar/Navbar";
+import { useSelector } from "react-redux";
 
 const drawerWidth = 240;
 
 export default function Sidebar() {
+
+  const mobileScreen = useSelector((state) => state.dashboard.mobileView);
+
   return (
     <>
       <Box sx={{ display: "flex" }}>
@@ -28,10 +32,108 @@ export default function Sidebar() {
         <Navbar />
 
         {/* side bar section */}
+        
+        {
+          mobileScreen?
+          <Drawer
+          variant="permanent"
+          sx={{
+            width: drawerWidth,
+            display:"block",
+            flexShrink: 0,
+            [`& .MuiDrawer-paper`]: {
+              width: drawerWidth,
+              boxSizing: "border-box",
+            },
+          }}
+        >
+          <Toolbar />
+          <Box sx={{ overflow: "auto" }}>
+            <List>
+              <ListItem disablePadding>
+                <ListItemButton component={Link} to="/">
+                  <ListItemIcon>
+                 <HomeRoundedIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Dashboard" />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton component={Link} to="/employee">
+                  <ListItemIcon>
+                 <SettingsAccessibilityIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Employee" />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton component={Link} to="/Inbox">
+                  <ListItemIcon>
+                    <InboxIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Inbox" />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton component={Link} to="/about">
+                  <ListItemIcon>
+                    <MailIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="About" />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton component={Link} to="/send-email">
+                  <ListItemIcon>
+                    <InboxIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Send email" />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton component={Link} to="/drafts">
+                  <ListItemIcon>
+                    <MailIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Drafts" />
+                </ListItemButton>
+              </ListItem>
+            </List>
+            <Divider />
+            <List>
+              <ListItem disablePadding>
+                <ListItemButton component={Link} to="/all-mail">
+                  <ListItemIcon>
+                    <InboxIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="All mail" />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton component={Link} to="/trash">
+                  <ListItemIcon>
+                    <InboxIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Trash" />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton component={Link} to="/spam">
+                  <ListItemIcon>
+                    <MailIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Spam" />
+                </ListItemButton>
+              </ListItem>
+            </List>
+          </Box>
+        </Drawer>:
+        
         <Drawer
           variant="permanent"
           sx={{
             width: drawerWidth,
+            display:"none",
             flexShrink: 0,
             [`& .MuiDrawer-paper`]: {
               width: drawerWidth,
@@ -120,6 +222,8 @@ export default function Sidebar() {
             </List>
           </Box>
         </Drawer>
+        }
+      
       </Box>
     </>
   );

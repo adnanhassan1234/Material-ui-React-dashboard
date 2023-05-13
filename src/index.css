@@ -6,6 +6,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #F6F6F6 !important;
+  box-sizing: border-box;
 }
 
 code {
@@ -33,4 +34,11 @@ code {
 /* table even rows background color  */
 .MuiDataGrid-root .MuiDataGrid-row:nth-child(even) {
   background-color: #ffffff !important; /* or any other color you want */
+}
+/* table header name font weight bold  */
+.css-t89xny-MuiDataGrid-columnHeaderTitle {
+  font-weight: bold !important;
+}
+.css-1iyq7zh-MuiDataGrid-columnHeaders{
+  background-color: white !important;
 }

@@ -12,13 +12,16 @@ import { MoreVert } from "@mui/icons-material";
 import React from "react";
 
 const EmployeeCard = (content) => {
+
   const { id, image, name, title } = content;
+
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
+  const handleClose = (id) => {
+    console.log("🚀 ~ file: EmployeeCard.js:24 ~ handleClose ~ id:", id)
     setAnchorEl(null);
   };
 
@@ -58,7 +61,7 @@ const EmployeeCard = (content) => {
             "aria-labelledby": "basic-button",
           }}
         >
-          <MenuItem onClick={handleClose}>Edit</MenuItem>
+          <MenuItem onClick={() => handleClose(id)}>Edit</MenuItem>
           <MenuItem onClick={handleClose}>Delete</MenuItem>
           <MenuItem onClick={handleClose}>View</MenuItem>
         </Menu>
