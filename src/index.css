@@ -103,3 +103,8 @@ code {
   padding-right: 16px;
   width: auto !important;
 }
+@media screen and (max-width: 480px) {
+  .MuiBox-root-10  {
+    display: none !important;
+  }
+}
