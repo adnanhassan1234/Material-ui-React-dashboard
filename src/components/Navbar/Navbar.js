@@ -17,16 +17,19 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import CssBaseline from "@mui/material/CssBaseline";
 import { toggleState } from "../../features/DashboardSlice";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
+import { ListItemButton } from "@mui/material";
+import { ListItem, ListItemText } from "@material-ui/core";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
   backgroundColor: alpha(theme.palette.common.white, 0.15),
   "&:hover": {
-    backgroundColor: alpha(theme.palette.common.white, 0.25),
+    backgroundColor: alpha(theme.palette.common.white, 0.05),
   },
-  marginRight: theme.spacing(2),
+  marginRight: theme.spacing(0),
   marginLeft: 0,
   width: "100%",
   [theme.breakpoints.up("sm")]: {
@@ -36,7 +39,7 @@ const Search = styled("div")(({ theme }) => ({
 }));
 
 const SearchIconWrapper = styled("div")(({ theme }) => ({
-  padding: theme.spacing(0, 2),
+  padding: theme.spacing(0, 0),
   height: "100%",
   position: "absolute",
   pointerEvents: "none",
@@ -54,16 +57,17 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     transition: theme.transitions.create("width"),
     width: "100%",
     [theme.breakpoints.up("md")]: {
-      width: "20ch",
+      width: "00ch",
     },
   },
 }));
 
 function Navbar() {
-
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = React.useState(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] = React.useState(null);
+
+  const mobileScreen = useSelector((state) => state.dashboard.mobileView);
 
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -160,10 +164,9 @@ function Navbar() {
     </Menu>
   );
 
-
   const changeDashboardView = () => {
-    dispatch(toggleState())
-  }
+    dispatch(toggleState());
+  };
   return (
     <>
       <Box sx={{ display: "flex" }}>
@@ -181,19 +184,120 @@ function Navbar() {
                   edge="start"
                   color="inherit"
                   aria-label="open drawer"
-                  sx={{ mr: 2 }}
+                  sx={{ mr: 0 }}
                   onClickCapture={changeDashboardView}
                 >
                   <MenuIcon />
                 </IconButton>
-                <Typography
-                  variant="h6"
-                  noWrap
-                  component="div"
-                  sx={{ display: { xs: "none", sm: "block" } }}
-                >
-                  MUI DASHBOARD
-                </Typography>
+                {mobileScreen ? (
+                  <Typography
+                    variant="h6"
+                    noWrap
+                    component="div"
+                    sx={{ display: { xs: "none", md: "block" } }}
+                  >
+                    MUI DASHBOARD
+                  </Typography>
+                ) : null}
+
+                {!mobileScreen && (
+                  <>
+                    <ListItem>
+                      <ListItemButton
+                        component={Link}
+                        to="/"
+                        sx={{ display: { xs: "none", md: "block" } }}
+                      >
+                        <ListItemText primary="Dashboard" />
+                      </ListItemButton>
+                    </ListItem>
+                    <ListItem>
+                      <ListItemButton
+                        component={Link}
+                        to="/employee"
+                        sx={{
+                          marginLeft: "-35px",
+                          display: { xs: "none", md: "block" },
+                        }}
+                      >
+                        <ListItemText primary="Employee" />
+                      </ListItemButton>
+                    </ListItem>
+                    <ListItem>
+                      <ListItemButton
+                        component={Link}
+                        to="/inbox"
+                        sx={{
+                          marginLeft: "-35px",
+                          display: { xs: "none", md: "block" },
+                        }}
+                      >
+                        <ListItemText primary="Inbox" />
+                      </ListItemButton>
+                    </ListItem>
+                    <ListItem>
+                      <ListItemButton
+                        component={Link}
+                        to="/about"
+                        sx={{
+                          marginLeft: "-35px",
+                          display: { xs: "none", md: "block" },
+                        }}
+                      >
+                        <ListItemText primary="About" />
+                      </ListItemButton>
+                    </ListItem>
+                    <ListItem>
+                      <ListItemButton
+                        component={Link}
+                        to="/email"
+                        sx={{
+                          marginLeft: "-35px",
+                          display: { xs: "none", md: "block" },
+                        }}
+                      >
+                        <ListItemText primary="Send email" />
+                      </ListItemButton>
+                    </ListItem>
+                    <ListItem>
+                      <ListItemButton
+                        component={Link}
+                        to="/drafts"
+                        sx={{
+                          marginLeft: "-35px",
+                          display: { xs: "none", md: "block" },
+                        }}
+                      >
+                        <ListItemText primary="Drafts" />
+                      </ListItemButton>
+                    </ListItem>
+                    <ListItem>
+                      <ListItemButton
+                        component={Link}
+                        to="/all-mail"
+                        sx={{
+                          marginLeft: "-35px",
+                          display: { xs: "none", md: "block" },
+                        }}
+                      >
+                        <ListItemText primary="All mail" />
+                      </ListItemButton>
+                    </ListItem>
+                    <ListItem>
+                      <ListItemButton
+                        component={Link}
+                        to="/trash"
+                        sx={{
+                          marginLeft: "-35px",
+                          display: { xs: "none", md: "block" },
+                        }}
+                      >
+                        <ListItemText primary="Trash" />
+                      </ListItemButton>
+                    </ListItem>
+                  </>
+                )}
+
                 {/* <Search>
                   <SearchIconWrapper>
                     <SearchIcon />
