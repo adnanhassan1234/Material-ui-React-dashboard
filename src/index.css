@@ -42,3 +42,59 @@ code {
 .css-1iyq7zh-MuiDataGrid-columnHeaders{
   background-color: white !important;
 }
+
+/* pagination */
+.result_pagination {
+  background-color: #3F84FC;
+  color: #fff;
+  font-size: 14px;
+  display: flex;
+  padding: 10px;
+  align-items: flex-start;
+  justify-content: flex-end;
+}
+
+.result_pagination .form-control,
+.result_pagination select {
+  line-height: 23px !important;
+  padding: 0px 0px !important;
+  border-radius: 20px !important;
+  font-size: 15px;
+  background-color: #3F84FC !important;
+  color: #fff !important;
+  display: block;
+  width: 24px !important;
+  box-sizing: border-box;
+  height: 20px !important;
+  font-weight: bold;
+  border: 1px solid #3F84FC !important;
+}
+
+.result_pagination .pagination {
+  margin: 0;
+  display: flex;
+  list-style: none;
+}
+
+.result_pagination .pagination li {
+  margin: 1px;
+}
+
+.result_pagination .pagination .page-num {
+  padding: 4px 15px;
+  cursor: pointer;
+  border-radius: 3px;
+  font-weight: 400;
+  text-decoration: none;
+  color: #fff;
+}
+
+.result_pagination .pagination .page-num:hover {
+  background-color: rgba(255,255,255,0.1);
+  color: #fff;
+}
+
+.result_pagination .pagination .active {
+  background-color: rgba(255,255,255,0.15);
+  color: #fff;
+}
