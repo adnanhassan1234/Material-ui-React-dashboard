@@ -176,7 +176,7 @@ function Navbar() {
           sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
         >
           <Box sx={{ flexGrow: 1 }}>
-            <AppBar>
+            <AppBar> 
               <Toolbar>
                 {/* bar icon */}
                 <IconButton

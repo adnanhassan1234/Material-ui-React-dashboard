@@ -192,6 +192,7 @@ export default function Employee(props) {
       </Box>
       {viewMode === "grid" ? (
         <Box className="employee_card" sx={{ my: 2, pb: 4 }}>
+        {/* maxWidth="xxl" */}
           <Container>
             <Grid container spacing={3}>
               {currentItems.length === 0 ? (
