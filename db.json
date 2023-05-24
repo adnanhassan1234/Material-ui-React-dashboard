@@ -1,0 +1,76 @@
+{
+  "users": [
+    {
+      "name": "Rao aqib",
+      "email": "ah5404219@gmail.com",
+      "mobile": "+91347627665532",
+      "joiningDate": "2023-05-03",
+      "title": "Web Designer",
+      "id": "IKzdav-"
+    },
+    {
+      "name": "bakr araisdd",
+      "email": "ah5404219@gmail.com",
+      "mobile": "+913476275532",
+      "joiningDate": "2023-05-03",
+      "title": "Web Designer",
+      "id": "YM5RL3-"
+    },
+    {
+      "id": "32OtySy",
+      "name": "mohsin raza",
+      "email": "ah5404219@gmail.com",
+      "title": "iOS Developer",
+      "mobile": "+913476275532",
+      "joiningDate": "2023-05-02"
+    },
+    {
+      "name": "Adnan hassan",
+      "email": "ah5404219@gmail.com",
+      "mobile": "+913476275532",
+      "joiningDate": "2023-05-18",
+      "title": "Web Designer",
+      "id": "sk0gJHE"
+    },
+    {
+      "name": "John Smith",
+      "email": "ah5404219@gmail.com",
+      "mobile": "+913476275532",
+      "joiningDate": "2023-05-02",
+      "title": "Web Developer",
+      "id": "y6a-nIF"
+    },
+    {
+      "name": "Bernardo Galaviz",
+      "email": "ah5404219@gmail.com",
+      "mobile": "+913476275532",
+      "joiningDate": "2023-05-04",
+      "title": "Android Developer",
+      "id": "1zZ6ZK0"
+    },
+    {
+      "name": "Lesley Grauers",
+      "email": "ah5404219@gmail.com",
+      "mobile": "+913476275532",
+      "joiningDate": "2023-05-07",
+      "title": "iOS Developer",
+      "id": "4MWu1pT"
+    },
+    {
+      "name": "Richard shane",
+      "email": "ah5404219@gmail.com",
+      "mobile": "+913476275532",
+      "title": "Web Developer",
+      "joiningDate": "2023-05-09",
+      "id": "AH_QjMD"
+    },
+    {
+      "name": "Adnan",
+      "email": "ah5404219@gmail.com",
+      "mobile": "+913476275532",
+      "joiningDate": "2023-05-04",
+      "title": "Web Developer",
+      "id": "jxwrRMa"
+    }
+  ]
+}

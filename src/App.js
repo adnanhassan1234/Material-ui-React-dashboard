@@ -7,6 +7,7 @@ import Sidebar from "./components/Sidebar/Sidebar";
 import Employee from "./components/Employee/Employee";
 import { Box } from "@mui/material";
 import { useSelector } from "react-redux";
+import LeaveAdmin from "./components/Leave Admin/LeaveAdmin";
 // import other components that you want to render
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
             <Route path="/about" element={<About />} />
             <Route path="/service" element={<Service />} />
             <Route path="/employee" element={<Employee />} />
+            <Route path="/leaves-admin" element={<LeaveAdmin />} />
             {/* add more routes here */}
           </Routes>
         </div>

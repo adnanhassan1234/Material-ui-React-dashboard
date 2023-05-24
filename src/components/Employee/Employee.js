@@ -11,52 +11,74 @@ import TextField from "@mui/material/TextField";
 import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
 import { useState } from "react";
 import EmployeeCard from "./EmployeeCard";
-import cardData from "./CardData";
 import EmployeeTable from "./EmployeeTable";
-import ReactPaginate from "react-paginate";
+import TablePagination from "@mui/material/TablePagination";
+// import cardContent from "../Utils/cardContent";
+import axios from "axios";
 import { useEffect } from "react";
+import AddIcon from "@mui/icons-material/Add";
+import AddNewEmployee from "./AddNewEmployee";
 
 // rest of your code here
 
 export default function Employee(props) {
   var classes = useStyles();
-  const [cardContent, setCardContent] = useState(cardData);
+  const [cardContent, setCardContent] = useState([]);
   const [viewMode, setViewMode] = useState("grid");
   const [searchTerm, setSearchTerm] = useState("");
   const [searchTermById, setSearchTermById] = useState("");
   const [searchTermByTitle, setSearchTermByTitle] = useState("");
+  const [open, setOpen] = useState(false); // popup
+  const [isLoader, setIsLoader] = useState(false);
+  // pagination state
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(8);
 
-  // ======= start pagination =======
-  const [currentItems, setCurrentItems] = useState([]);
-  const [pageCount, setPageCount] = useState(0);
-  const [itemOffset, setItemOffset] = useState(0);
-  const [itemsPerPage, setItemsPerPage] = useState(8); // Set default value to 8
-
-  useEffect(() => {
-    const endOffset = itemOffset + itemsPerPage;
-    setCurrentItems(cardContent.slice(itemOffset, endOffset));
-    setPageCount(Math.ceil(cardContent.length / itemsPerPage));
-  }, [itemOffset, itemsPerPage, cardContent]);
-
-  const handlePageClick = (event) => {
-    const newOffset = event.selected * itemsPerPage;
-    setItemOffset(newOffset);
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
   };
 
-  // rows per page
-  const handleRowsPerPageChange = (event) => {
-    setItemsPerPage(parseInt(event.target.value));
-    setItemOffset(0);
-  }; // ======= close pagination =======
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+  // Pagination calculations
+  const startIndex = page * rowsPerPage;
+  const endIndex = startIndex + rowsPerPage;
+  const paginatedCardContent = cardContent.slice(startIndex, endIndex);
 
   // toggle mode grid and list view => true and false
   const handleViewModeChange = (mode) => {
     setViewMode(mode);
   };
 
+  // fetch data
+  async function fetchData() {
+    try {
+      const response = await axios.get("http://localhost:3005/users");
+      setCardContent(response.data);
+      setIsLoader(true);
+    } catch (error) {
+      // Handle any errors that occurred during the request
+      console.error(error);
+    }
+  }
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  if (!isLoader) {
+    return (
+      <Box>
+        <Typography variant="h4">Loading...</Typography>
+      </Box>
+    );
+  }
+
   // search by id , name and designation title base on click search button functionality
   const handleSearch = () => {
-    const filteredCards = cardData.filter(
+    const filteredCards = cardContent.filter(
       (card) =>
         card.name.toLowerCase().includes(searchTerm.toLowerCase()) &&
         card.id
@@ -71,6 +93,11 @@ export default function Employee(props) {
     setCardContent(filteredCards);
   };
 
+  // open and close popup
+  const handleClosePopup = () => {
+    setOpen(false);
+  };
+
   // active grid bg color set
   const gridButtonClass = viewMode === "grid" ? "active" : "inactive";
   const listButtonClass = viewMode === "list" ? "active" : "inactive";
@@ -79,7 +106,7 @@ export default function Employee(props) {
     <>
       <Box className="employee">
         <Container>
-          <Typography color="text.primary" variant="h4" my={2}>
+          <Typography color="text.primary" variant="h5" my={2}>
             Employee
           </Typography>
           <Grid container spacing={2} className={classes.box}>
@@ -88,7 +115,7 @@ export default function Employee(props) {
                 <Link underline="hover" color="inherit" href="/">
                   <b>Dashboard</b>
                 </Link>
-                <Typography color="text.primary">Employee</Typography>
+                <Typography color="text.primary"> Employee</Typography>
               </Breadcrumbs>
             </Grid>
             <Grid item sm={4}>
@@ -101,6 +128,16 @@ export default function Employee(props) {
                   className={`${classes.space} ${listButtonClass}`}
                   onClick={() => handleViewModeChange("list")}
                 />
+                <Button
+                  variant="contained"
+                  sx={{ ml: 2 }}
+                  onClick={() => {
+                    setOpen(true);
+                  }}
+                >
+                  {" "}
+                  <AddIcon /> Add Employee
+                </Button>
               </div>
             </Grid>
           </Grid>
@@ -192,16 +229,21 @@ export default function Employee(props) {
       </Box>
       {viewMode === "grid" ? (
         <Box className="employee_card" sx={{ my: 2, pb: 4 }}>
-        {/* maxWidth="xxl" */}
           <Container>
             <Grid container spacing={3}>
-              {currentItems.length === 0 ? (
+              {paginatedCardContent.length === 0 ? (
                 <Typography variant="body1" sx={{ mx: 4 }}>
                   No employees found based on the search criteria.
                 </Typography>
               ) : (
-                currentItems.map((content, ind) => {
-                  return <EmployeeCard key={ind} {...content} />;
+                paginatedCardContent.map((content, ind) => {
+                  return (
+                    <EmployeeCard
+                      key={ind}
+                      {...content}
+                      fetchData={fetchData}
+                    />
+                  );
                 })
               )}
             </Grid>
@@ -209,7 +251,6 @@ export default function Employee(props) {
         </Box>
       ) : (
         <Box className="employee_table" sx={{ pb: 4, mt: 0 }}>
-          {/* <Container> */}
           <Grid container>
             {cardContent.length === 0 ? (
               <Typography variant="body1" sx={{ mt: 1, mx: 4 }}>
@@ -219,46 +260,29 @@ export default function Employee(props) {
               <EmployeeTable cardContent={cardContent} />
             )}
           </Grid>
-          {/* </Container> */}
         </Box>
       )}
 
-      {/* employee card pagination */}
-      <Container sx={{ mb: 5 }}>
-        {viewMode === "grid" ? (
-          <div className="result_pagination">
-            <span> Rows: </span> &nbsp;{itemsPerPage}
-            <select onChange={handleRowsPerPageChange} value={itemsPerPage}>
-              <option value={8} selected>
-                8
-              </option>
-              {/* Set default to 3 */}
-              <option value={12}>12</option>
-              <option value={16}>16</option>
-              <option value={32}>32</option>
-            </select>
-            <Box sx={{mx:3}}>
-              {itemOffset + 1} - {itemOffset + itemsPerPage} of{" "}
-              {cardContent.length}
-            </Box>
-            <ReactPaginate
-              breakLabel="..."
-              nextLabel="Next"
-              onPageChange={handlePageClick}
-              pageRangeDisplayed={3}
-              pageCount={pageCount}
-              rowsPerPage={itemsPerPage}
-              previousLabel="Prev"
-              renderOnZeroPageCount={null}
-              containerClassName="pagination"
-              pageLinkClassName="page-num"
-              previousLinkClassName="page-num"
-              nextLinkClassName="page-num"
-              activeLinkClassName="active"
-            />
-          </div>
-        ) : null}
-      </Container>
+      {/* mui Pagination */}
+      {viewMode === "grid" ? (
+        <Box sx={{ display: "flex", justifyContent: "end", mb: 4 }}>
+          <TablePagination
+            component="div"
+            count={cardContent.length}
+            page={page}
+            onPageChange={handleChangePage}
+            rowsPerPage={rowsPerPage}
+            rowsPerPageOptions={[8, 16, 24]} // You can customize the rows per page options
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Box>
+      ) : null}
+      <AddNewEmployee
+        fetchData={fetchData}
+        open={open}
+        handleClosePopup={handleClosePopup}
+        onHide={() => setOpen(false)}
+      />
     </>
   );
 }

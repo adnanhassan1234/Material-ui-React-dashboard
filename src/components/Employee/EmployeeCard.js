@@ -8,29 +8,41 @@ import {
   MenuItem,
   Typography,
 } from "@mui/material";
-import { MoreVert } from "@mui/icons-material";
+import { MoreVert, Edit } from "@mui/icons-material";
 import React, { useState } from "react";
 import EmployeePopup from "./EmployeePopup";
+import card1 from "../../assets/image/card1.jpg";
+import axios from "axios";
+import { useSnackbar } from "notistack";
+import AddNewEmployee from "./AddNewEmployee";
 
-const EmployeeCard = (content) => {
-  const { id, image, name, title } = content;
+const EmployeeCard = ({
+  id,
+  image,
+  name,
+  title,
+  joiningDate,
+  email,
+  mobile,
+  fetchData,
+}) => {
   const [open, setOpen] = useState(false);
   const [selectedData, setSelectedData] = useState({});
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [selectedEditData, setSelectedEditData] = useState({});
+  const { enqueueSnackbar } = useSnackbar();
 
   const selectedFunction = (item) => {
     console.log(item);
-    if (open == true) {
+    if (open === true) {
       setOpen(false);
       setSelectedData({});
-      // setOpen(true);
     } else {
       setOpen(true);
       setSelectedData(item);
-      // setOpen(true);
     }
   };
 
-  // open and close popup
   const handleClosePopup = () => {
     setOpen(false);
   };
@@ -40,8 +52,38 @@ const EmployeeCard = (content) => {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = (id) => {
+  const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const deleteUser = async (id) => {
+    try {
+      await axios.delete(`http://localhost:3005/users/` + id);
+      fetchData();
+      handleClose();
+      enqueueSnackbar("User deleted successfully!", {
+        variant: "success",
+        anchorOrigin: {
+          vertical: "bottom",
+          horizontal: "right",
+        },
+      });
+    } catch (error) {
+      console.error(error);
+      console.log(error.response);
+      enqueueSnackbar("An error occurred while deleting the user.", {
+        variant: "error",
+        anchorOrigin: {
+          vertical: "bottom",
+          horizontal: "right",
+        },
+      });
+    }
+  };
+
+  const handleOpenEditModal = (user) => {
+    setSelectedEditData(user);
+    setOpenEditModal(true);
   };
 
   return (
@@ -55,7 +97,7 @@ const EmployeeCard = (content) => {
               borderRadius: "50%",
               margin: "23px auto 0",
             }}
-            image={image}
+            image={card1}
             title="Employee"
           />
           <CardContent>
@@ -68,7 +110,7 @@ const EmployeeCard = (content) => {
               {name}
             </Typography>
             <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-              <b> {title}</b>
+              <b>{title}</b>
             </Typography>
           </CardContent>
           <IconButton
@@ -86,12 +128,26 @@ const EmployeeCard = (content) => {
               "aria-labelledby": "basic-button",
             }}
           >
-            <MenuItem onClick={() => handleClose(id)}>Edit</MenuItem>
-            <MenuItem onClick={handleClose}>Delete</MenuItem>
+            <MenuItem onClick={() => handleOpenEditModal({ id, name, email, title, mobile, joiningDate })}>Edit</MenuItem>
+            <MenuItem
+              onClick={() => {
+                deleteUser(id);
+                handleClose(id);
+              }}
+            >
+              Delete
+            </MenuItem>
             <MenuItem
               onClick={() => {
                 handleClose();
-                selectedFunction(content);
+                selectedFunction({
+                  id,
+                  name,
+                  email,
+                  title,
+                  mobile,
+                  joiningDate,
+                });
               }}
             >
               View
@@ -99,6 +155,14 @@ const EmployeeCard = (content) => {
           </Menu>
         </Card>
       </Grid>
+
+      <AddNewEmployee
+        handleClosePopup={() => setOpenEditModal(false)}
+        open={openEditModal}
+        fetchData={fetchData}
+        selectedEditData={selectedEditData}
+      />
+
       <EmployeePopup
         open={open}
         handleClosePopup={handleClosePopup}

@@ -67,11 +67,11 @@ export default function Sidebar() {
                 </ListItemButton>
               </ListItem>
               <ListItem disablePadding>
-                <ListItemButton component={Link} to="/Inbox">
+                <ListItemButton component={Link} to="/leaves-admin">
                   <ListItemIcon>
                     <InboxIcon />
                   </ListItemIcon>
-                  <ListItemText primary="Inbox" />
+                  <ListItemText primary="Leaves (Admin)" />
                 </ListItemButton>
               </ListItem>
               <ListItem disablePadding>

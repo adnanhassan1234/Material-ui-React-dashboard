@@ -5,6 +5,7 @@ import styled from "@mui/material/styles/styled";
 import { TableRow } from "@mui/material";
 import { MoreVert } from "@mui/icons-material";
 import { useState } from "react";
+import card1 from '../../assets/image/card2.jpg'
 
 const EmployeeTable = (props) => {
   const [anchorEl, setAnchorEl] = useState(null);
@@ -18,7 +19,7 @@ const EmployeeTable = (props) => {
       renderCell: (params) => (
         <div style={{ display: "flex", alignItems: "center" }}>
           <img
-            src={params.row.image}
+            src={card1}
             style={{ height: "36px", borderRadius: "50%", marginRight: "10px" }}
           />
           <div>
