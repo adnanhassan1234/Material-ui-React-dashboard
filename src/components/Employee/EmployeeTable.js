@@ -5,10 +5,46 @@ import styled from "@mui/material/styles/styled";
 import { TableRow } from "@mui/material";
 import { MoreVert } from "@mui/icons-material";
 import { useState } from "react";
-import card1 from '../../assets/image/card2.jpg'
+import card1 from "../../assets/image/card2.jpg";
+import axios from "axios";
+import { enqueueSnackbar } from "notistack";
+import AddNewEmployee from "./AddNewEmployee";
 
 const EmployeeTable = (props) => {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [open, setOpen] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
+  const [selectedEditData, setSelectedEditData] = useState({});
+
+  const deleteUser = async (id) => {
+    try {
+      await axios.delete(`http://localhost:3005/users/` + id);
+      props.fetchData();
+      // handleClose();
+      enqueueSnackbar("User deleted successfully!", {
+        variant: "success",
+        anchorOrigin: {
+          vertical: "bottom",
+          horizontal: "right",
+        },
+      });
+    } catch (error) {
+      console.error(error);
+      console.log(error.response);
+      enqueueSnackbar("An error occurred while deleting the user.", {
+        variant: "error",
+        anchorOrigin: {
+          vertical: "bottom",
+          horizontal: "right",
+        },
+      });
+    }
+  };
+
+  const handleOpenEditModal = (user) => {
+    setSelectedEditData(user);
+    setOpenEditModal(true);
+  };
 
   const columns = [
     {
@@ -44,7 +80,6 @@ const EmployeeTable = (props) => {
       width: 150,
       sortable: false,
       renderCell: (params) => {
-
         const handleClick = (event) => {
           event.stopPropagation(); // when click checkbox not selected
           setAnchorEl(event.currentTarget);
@@ -55,13 +90,13 @@ const EmployeeTable = (props) => {
         };
 
         const handleEdit = (id) => {
-          console.log("Edit clicked for row with ID",id);
-        //   console.log("Edit clicked for row with ID", params);
+          console.log("Edit clicked for row with ID", id);
+          //   console.log("Edit clicked for row with ID", params);
           handleClose();
         };
 
         const handleDelete = () => {
-          console.log("Delete clicked for row with ID", params.row.id);
+          // console.log("Delete clicked for row with ID", params.row.id);
           handleClose();
         };
 
@@ -76,8 +111,22 @@ const EmployeeTable = (props) => {
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
-              <MenuItem onClick={() => handleEdit(params.row.id)}>Edit</MenuItem>
-              <MenuItem onClick={handleDelete}>Delete</MenuItem>
+              <MenuItem
+                onClick={() => {
+                  handleEdit(params.row.id);
+                  handleOpenEditModal(params.row);
+                }}
+              >
+                Edit
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  deleteUser(params.row.id);
+                  handleDelete();
+                }}
+              >
+                Delete
+              </MenuItem>
             </Menu>
           </div>
         );
@@ -87,23 +136,29 @@ const EmployeeTable = (props) => {
 
   return (
     <>
-      {/* <div className="service_table"> */}
-        <Container sx={{ my: 5 }}>
-          <div style={{ width: "100%" }}>
-            <DataGrid
-              rows={props.cardContent}
-              columns={columns}
-              initialState={{
-                pagination: {
-                  paginationModel: { page: 0, pageSize: 5 },
-                },
-              }}
-              pageSizeOptions={[5, 10]}
-              checkboxSelection
-            />
-          </div>
-        </Container>
-      {/* </div> */}
+      <Container sx={{ my: 5 }}>
+        <div style={{ width: "100%" }}>
+          <DataGrid
+            rows={props.cardContent}
+            columns={columns}
+            initialState={{
+              pagination: {
+                paginationModel: { page: 0, pageSize: 5 },
+              },
+            }}
+            pageSizeOptions={[5, 10]}
+            checkboxSelection
+          />
+        </div>
+      </Container>
+
+      {/* edit user data in model */}
+      <AddNewEmployee
+        handleClosePopup={() => setOpenEditModal(false)}
+        open={openEditModal}
+        fetchData={props.fetchData}
+        selectedEditData={selectedEditData}
+      />
     </>
   );
 };

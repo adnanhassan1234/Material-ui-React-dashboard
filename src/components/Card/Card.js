@@ -1,126 +1,89 @@
-import { Button, Container, Grid, Box } from "@mui/material";
-import Card from "@mui/material/Card";
-import CardActions from "@mui/material/CardActions";
-import CardContent from "@mui/material/CardContent";
-import CardMedia from "@mui/material/CardMedia";
-import Typography from "@mui/material/Typography";
-import profile from "../../assets/image/hassan.jpg";
-import profile1 from "../../assets/image/pexels-photo-122892.jpeg";
-import profile2 from "../../assets/image/pexels-photo-631317.jpeg";
-import profile3 from "../../assets/image/pexels-photo-1757247.jpeg";
-import profile4 from "../../assets/image/pexels-photo-634613.jpeg";
-import CardModel from "./CardModel";
-import { useState } from "react";
+import { Box, Select, MenuItem } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Legend,
+  ResponsiveContainer
+} from "recharts";
 
-const cardData = [
-  {
-    id: 1,
-    image: profile,
-    title: "Adnan hassan",
-    para: "Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica",
-  },
-  {
-    id: 2,
-    image: profile1,
-    title: "Usman ali",
-    para: "Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica",
-  },
-  {
-    image: profile2,
-    title: "Haris ullah",
-    para: "Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica",
-  },
-  {
-    id: 3,
-    image: profile3,
-    title: "Abu bakr",
-    para: "Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica",
-  },
-  {
-    id: 4,
-    image: profile4,
-    title: "Gull Khan",
-    para: "Lizards are a widespread group of squamate reptiles, with over 6,000 species, ranging across all continents except Antarctica",
-  },
-];
+const Barchart = () => {
+  const [chartData, setChartData] = useState([]);
+  const [selectedOption, setSelectedOption] = useState("15"); // Default to 15 days
 
-function Cards() {
+  const handleOptionChange = (event) => {
+    setSelectedOption(event.target.value);
+  };
 
-    const [open, setOpen] = useState(false);
-    const [selectedData, setSelectedData] = useState({});
+  const fetchChartData = async () => {
+    try {
+      const response = await fetch(
+        "https://api.apify.com/v2/key-value-stores/tVaYRsPHLjNdNBu7S/records/LATEST?disableRedirect=true"
+      );
+      const data = await response.json();
 
-  const selectedFunction = (item) => {
-    console.log(item);
-    if (open == true) {
-      setOpen(false);
-      setSelectedData({});
-      // setOpen(true);
-    } else {
-      setOpen(true);
-      setSelectedData(item);
-      // setOpen(true);
+      const extractedData = data.map((item) => ({
+        country: item.country,
+        infected: item.infected,
+        recovered: item.recovered,
+        lastUpdatedApify: item.lastUpdatedApify,
+      }));
+
+      extractedData.sort(
+        (a, b) => new Date(b.lastUpdatedApify) - new Date(a.lastUpdatedApify)
+      );
+
+      const filteredData = extractedData.slice(0, parseInt(selectedOption));
+      setChartData(filteredData);
+    } catch (error) {
+      console.error(error);
     }
   };
 
+  useEffect(() => {
+    fetchChartData();
+  }, [selectedOption]);
 
-  const handleClose = () => {
-    setOpen(false);
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const formattedDate = `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`;
+    return formattedDate;
   };
 
   return (
     <>
-      <Box
-        component="main"
-        sx={{
-          // py: 8,
-          // backgroundColor:"#3D4044"
-        }}
-      >
-        <Container>
-          <Grid container spacing={3}>
-            {cardData?.map((content) => {
-              return (
-                <>
-                  <Grid item lg={3} md={6}>
-                    <Card>
-                      <CardMedia
-                        sx={{ height: 230 }}
-                        image={content.image}
-                        title="green iguana"
-                      />
-                      <CardContent>
-                        <Typography gutterBottom variant="h5" component="div">
-                          {content.title}
-                        </Typography>
-                        <Typography variant="body2" color="text.secondary">
-                          {content.para}
-                        </Typography>
-                      </CardContent>
-                      <CardActions>
-                        <Button
-                          className="my-custom-button"
-                          active={false}
-                          color="success"
-                          variant="contained"
-                          size="medium"
-                          sx={{ mb: 2 }}
-                          // onClick={handleOpen}
-                          onClick={() => selectedFunction(content)}
-                        >
-                          success
-                        </Button>
-                      </CardActions>
-                    </Card>
-                  </Grid>
-                </>
-              );
-            })}
-          </Grid>
-        </Container>
-        <CardModel open={open} handleClose={handleClose} selectedData={selectedData} onHide={() => setOpen(false)} />
+      {/* <Box sx={{ ml: 5,backgroundColor: "white" }}>
+       
+      </Box> */}
+      <Box sx={{ ml: 5, backgroundColor: "white" }}>
+      <Select value={selectedOption} onChange={handleOptionChange} sx={{mb:3}}>
+          <MenuItem value="10">Last 10 Days</MenuItem>
+          <MenuItem value="15">Last 15 Days</MenuItem>
+          <MenuItem value="30">Last 30 Days</MenuItem>
+        </Select>
+        <ResponsiveContainer width="100%" aspect={2}>
+          <BarChart data={chartData}>
+            <CartesianGrid strokeDasharray="3" />
+            <XAxis dataKey="country" />
+            <YAxis />
+            <Tooltip
+              formatter={(value, name, props) => [
+                value,
+                `${props.payload.country} - ${name}`,
+              ]}
+            />
+            <Legend />
+            <Bar dataKey="infected" fill="#8884d8" barSize={60} />
+            <Bar dataKey="recovered" fill="#82ca9d" barSize={60} />
+          </BarChart>
+        </ResponsiveContainer>
       </Box>
     </>
   );
-}
+};
 
-export default Cards;
+export default Barchart;

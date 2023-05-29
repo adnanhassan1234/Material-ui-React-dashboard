@@ -13,7 +13,7 @@ import { useState } from "react";
 import EmployeeCard from "./EmployeeCard";
 import EmployeeTable from "./EmployeeTable";
 import TablePagination from "@mui/material/TablePagination";
-// import cardContent from "../Utils/cardContent";
+// import cardData from "../Utils/CardData";
 import axios from "axios";
 import { useEffect } from "react";
 import AddIcon from "@mui/icons-material/Add";
@@ -149,11 +149,12 @@ export default function Employee(props) {
         <Container>
           <Grid container spacing={2}>
             <Grid item lg={3} md={6} sm={6} xs={12}>
-              <Box mt={3}>
+              <Box mt={3}>  
                 <TextField
                   fullWidth
                   placeholder="Employee ID"
                   id="fullWidth"
+                  // label="Email Address"
                   sx={{ backgroundColor: "#fff" }}
                   onChange={(e) => setSearchTermById(e.target.value)}
                   onBlur={(e) => {
@@ -192,6 +193,7 @@ export default function Employee(props) {
                   <Select
                     fullWidth
                     labelId="designation-label"
+                    label="Select Designation"
                     id="designation-select"
                     value={searchTermByTitle}
                     onChange={(e) => setSearchTermByTitle(e.target.value)}
@@ -257,7 +259,7 @@ export default function Employee(props) {
                 No employees found based on the search criteria.
               </Typography>
             ) : (
-              <EmployeeTable cardContent={cardContent} />
+              <EmployeeTable cardContent={cardContent} fetchData={fetchData} />
             )}
           </Grid>
         </Box>

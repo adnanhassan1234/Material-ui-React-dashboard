@@ -8,6 +8,7 @@ import Employee from "./components/Employee/Employee";
 import { Box } from "@mui/material";
 import { useSelector } from "react-redux";
 import LeaveAdmin from "./components/Leave Admin/LeaveAdmin";
+import Dashboard from "./components/Dashboard/Dashboard";
 // import other components that you want to render
 
 function App() {
@@ -28,7 +29,7 @@ function App() {
           }}
         >
           <Routes>
-            <Route path="/" element={<Cards />} />
+            <Route path="/" element={<Dashboard />} />
             <Route path="/about" element={<About />} />
             <Route path="/service" element={<Service />} />
             <Route path="/employee" element={<Employee />} />
@@ -45,10 +46,11 @@ function App() {
           }}
         >
           <Routes>
-            <Route path="/" element={<Cards />} />
+          <Route path="/" element={<Dashboard />} />
             <Route path="/about" element={<About />} />
             <Route path="/service" element={<Service />} />
             <Route path="/employee" element={<Employee />} />
+            <Route path="/leaves-admin" element={<LeaveAdmin />} />
             {/* add more routes here */}
           </Routes>
         </div>

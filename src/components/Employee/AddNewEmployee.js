@@ -25,10 +25,6 @@ const AddNewEmployee = ({
   selectedEditData = {},
 }) => {
   const [formData, setFormData] = useState({ ...selectedEditData });
-  console.log(
-    "🚀 ~ file: AddNewEmployee.js:23 ~ AddNewEmployee ~ formData:",
-    formData
-  );
   const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {

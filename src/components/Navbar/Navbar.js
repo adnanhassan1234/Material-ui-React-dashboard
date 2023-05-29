@@ -226,13 +226,13 @@ function Navbar() {
                     <ListItem>
                       <ListItemButton
                         component={Link}
-                        to="/inbox"
+                        to="/leaves-admin"
                         sx={{
                           marginLeft: "-35px",
                           display: { xs: "none", md: "block" },
                         }}
                       >
-                        <ListItemText primary="Inbox" />
+                        <ListItemText primary="Leaves (Admin)" />
                       </ListItemButton>
                     </ListItem>
                     <ListItem>

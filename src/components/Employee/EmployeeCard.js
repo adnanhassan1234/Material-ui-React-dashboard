@@ -132,7 +132,7 @@ const EmployeeCard = ({
             <MenuItem
               onClick={() => {
                 deleteUser(id);
-                handleClose(id);
+                handleClose();
               }}
             >
               Delete
