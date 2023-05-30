@@ -104,7 +104,7 @@ const BarCharts = () => {
 
   return (
     <>
-      <Box sx={{p:2, backgroundColor: "white", borderRadius: "4px" }}>
+      <Box sx={{ p: 2, backgroundColor: "white", borderRadius: "4px" }}>
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           <Select
             value={selectedOption}
@@ -141,7 +141,7 @@ const BarCharts = () => {
           </Box>
         )}
         <br />
-        <ResponsiveContainer id="chart-container" width="100%" aspect={2}>
+        <ResponsiveContainer width="100%" aspect={2} id="chart-container" >
           <BarChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="country" />

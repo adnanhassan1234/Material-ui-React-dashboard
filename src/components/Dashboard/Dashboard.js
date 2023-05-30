@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { Box, Container, Grid, Tab, Typography } from "@mui/material";
+import { Box, Container, Grid, Tab, Typography, Button, TextField  } from "@mui/material";
 import styled from "styled-components";
 // import { Coronavirus } from "@mui/icons-material";
 import TabContext from "@mui/lab/TabContext";
@@ -16,6 +16,10 @@ import DashboardCards from "./DashboardCards";
 const Dashboard = () => {
   const [data, setData] = useState([]);
   // const [leaveEmployee] = useState(adminLeaveData);
+
+  // const handleDownload = () => {
+  //   // Logic for downloading the charts
+  // };
 
   const fetchData = async () => {
     try {
@@ -80,7 +84,29 @@ const Dashboard = () => {
       {/* dashboard cards crona patients */}
       <Box className="charts_tabs" my={5}>
         <Container>
+        {/* <Grid item xs={12} sm={6}>
+            <TextField
+              id="date"
+              label="Select Date"
+              type="date"
+              InputLabelProps={{
+                shrink: true,
+              }}
+              // fullWidth
+            />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleDownload}
+              // fullWidth
+            >
+              Download
+            </Button>
+          </Grid> */}
           <Grid container spacing={2}>
+          {/* here date filed and download button in right side */}
             <Grid item lg={6} md={6} sm={12} xs={12}>
               <BarCharts />
             </Grid>
