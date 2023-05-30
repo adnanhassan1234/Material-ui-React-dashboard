@@ -1,40 +1,314 @@
 {
     "data": [
-      {
-        "name": "Page A",
-        "uv": 4000,
-        "pv": 2400
-      },
-      {
-        "name": "Page B",
-        "uv": 3000,
-        "pv": 1398
-      },
-      {
-        "name": "Page C",
-        "uv": 2000,
-        "pv": 9800
-      },
-      {
-        "name": "Page D",
-        "uv": 2780,
-        "pv": 3908
-      },
-      {
-        "name": "Page E",
-        "uv": 1890,
-        "pv": 4800
-      },
-      {
-        "name": "Page F",
-        "uv": 2390,
-        "pv": 3800
-      },
-      {
-        "name": "Page G",
-        "uv": 3490,
-        "pv": 4300
-      }
-    ]
+        {
+          "infected": 423,
+          "tested": 991,
+        "recovered": 262,
+          "deceased": 681,
+          "country": "Algeria",
+          "lastUpdatedDate": "2022-11-21"
+        },
+        {
+          "infected": 492,
+          "tested": 141,
+         "recovered": 142,
+          "deceased": 149,
+          "country": "Austria",
+          "lastUpdatedDate": "2022-11-22"
+        },
+        {
+          "infected": 454,
+          "tested": 963,
+          "recovered": 50,
+          "deceased": 724,
+          "country": "AzerbaiedDate",
+          "lastUpdatedDate": "2022-10-19"
+        },
+        {
+          "infected": 415,
+          "tested": 184,
+          "recovered": 401,
+          "deceased": 1521,
+          "country": "Bahrain",
+          "lastUpdatedDate": "2022-10-20"
+        },
+        {
+          "infected": 263,
+          "tested": 380,
+          "recovered": 995,
+          "deceased": 365,
+          "country": "Belgium",
+          "lastUpdatedDate": "2022-04-21"
+        },
+        {
+          "infected": 495,
+          "tested": 996,
+        "recovered": 997,
+          "deceased": 907,
+          "country": "Brazil",
+          "lastUpdatedDate": "2022-11-22"
+        },
+        {
+          "infected": 248,
+          "tested": 997,
+        "recovered": 55,
+          "deceased": 997,
+          "country": "Bulgaria",
+          "lastUpdatedDate": "2022-11-23"
+        },
+        {
+          "infected": 4647,
+          "tested": 299,
+        "recovered": 899,
+          "deceased": 329,
+          "country": "Canada",
+          "lastUpdatedDate": "2022-03-14"
+        },
+        {
+          "infected": 462,
+          "tested": 160,
+          "recovered": 123,
+          "deceased": 229,
+          "country": "China",
+          "lastUpdatedDate": "2022-11-29"
+        },
+        {
+          "infected": 215,
+          "tested": 660,
+          "recovered": 228,
+          "deceased": 419,
+          "country": "Czech Republic",
+          "lastUpdatedDate": "2022-11-11"
+        },
+        {
+          "infected": 401,
+          "tested": 141,
+         "recovered": 141,
+          "deceased": 216,
+          "country": "Denmark",
+          "lastUpdatedDate": "2021-11-27"
+        },
+        {
+          "infected": 494,
+          "tested": 750,
+          "recovered": 993,
+          "deceased": 162,
+          "country": "Finland",
+          "lastUpdatedDate": "2021-09-30"
+        },
+        {
+          "infected": 419,
+          "tested": 292,
+        "recovered": 393,
+          "deceased": 992,
+          "country": "France",
+           
+          "lastUpdatedDate": "2022-11-15"
+        },
+        {
+          "infected": 452,
+          "tested": 989,
+        "recovered": 929,
+          "deceased": 13,
+          "country": "Germany",
+          "lastUpdatedDate": "2022-11-16"
+        },
+        {
+          "infected": 493,
+          "tested": 999,
+        "recovered": 848,
+          "deceased": 73,
+          "country": "Honduras",
+          "lastUpdatedDate": "2021-11-17"
+        },
+        {
+          "infected": 390,
+          "tested": 456,
+          "recovered": 910,
+          "deceased": 191,
+          "country": "Hungary",
+           
+          "lastUpdatedDate": "2022-08-18"
+        },
+        {
+          "infected": 48764,
+          "tested": 969,
+        "recovered": 571,
+          "deceased": 567,
+          "country": "India",
+          "lastUpdatedDate": "2022-07-19"
+        },
+        {
+          "infected": 296,
+          "tested": 285,
+          "recovered": 732,
+          "deceased": 626,
+          "country": "Iran",
+          "lastUpdatedDate": "2022-11-22"
+        },
+        {
+          "infected": 238,
+          "tested": 993,
+        "recovered": 125,
+          "deceased": 518,
+          "country": "Italy",
+          "lastUpdatedDate": "2022-8-22"
+        },
+        {
+          "infected": 1148,
+          "tested": 990,
+        "recovered": 998,
+          "deceased": 476,
+          "country": "Japan",
+          "lastUpdatedDate": "2022-10-13"
+        },
+        {
+          "infected": 401,
+          "tested": 1411,
+         "recovered": 465,
+          "deceased": 141,
+          "country": "Luxembourg",
+           
+          "lastUpdatedDate": "2022-9-19"
+        },
+        {
+          "infected": 1991,
+          "tested": 902,
+        "recovered": 906,
+          "deceased": 905,
+          "country": "Malaysia",
+          "lastUpdatedDate": "2022-9-21"
+        },
+        {
+          "infected": 7911,
+          "tested": 9911,
+        "recovered": 9912,
+          "deceased": 42,
+          "country": "Netherlands",
+          "lastUpdatedDate": "2021-08-06"
+        },
+        {
+          "infected": 483,
+          "tested": 994,
+        "recovered": 643,
+          "deceased": 3155,
+          "country": "Nigeria",
+         "lastUpdatedDate": "2022-12-21"
+        },
+        {
+          "infected": 1631,
+          "tested": 601,
+          "recovered": 996,
+          "deceased": 4154,
+          "country": "Norway", 
+          "lastUpdatedDate": "2022-12-19"
+        },
+        {
+          "infected": 412,
+            "tested": 996,
+           "recovered": 1234,
+          "deceased": 200,
+          "country": "Pakistan",
+          "lastUpdatedDate": "2022-02-20"
+        },
+        {
+          "infected": 484,
+          "tested": 334,
+          "recovered": 601,
+          "deceased": 862,
+          "country": "Palestine",
+          "lastUpdatedDate": "2023-03-26"
+        },
+        {
+          "infected": 249,
+          "tested": 991,
+        "recovered": 1687,
+          "deceased": 56401,
+          "country": "Philippines",
+          "lastUpdatedDate": "2023-03-03"
+        },
+        {
+          "infected": 564,
+          "tested": 499,        
+        "recovered": 399,
+          "deceased": 195,
+          "country": "Poland",
+          "lastUpdatedDate": "2023-02-10"
+        },
+        {
+          "infected": 406,
+          "tested": 997,
+        "recovered": 434,
+          "deceased": 173,
+          "country": "Portugal",
+          "lastUpdatedDate": "2021-07-14"
+        },
+        {
+          "infected": 124,
+          "tested": 742,
+          "recovered": 141,
+          "deceased": 433,
+          "country": "Romania",
+          "sourceUrl": "",
+          "lastUpdatedDate": "2020-11-21"
+        },
+        {
+          "infected": 354,
+          "tested": 355,
+          "recovered": 429,
+          "deceased": 307,
+          "country": "Russia", 
+          "lastUpdatedDate": "2020-11-21"
+        },
+        {
+          "infected": 476,
+          "tested": 909,
+        "recovered": 454,
+          "deceased": 9448,
+          "country": "Saudi Arabia",
+          "lastUpdatedDate": "2020-11-21"
+        },
+        {
+          "infected": 633,
+          "tested": 200,
+         "recovered": 299,
+          "deceased": 344,
+          "country": "Serbia", 
+          "lastUpdatedDate": "2020-11-20"
+        },
+        {
+          "infected": 214,
+          "tested": 29,
+        "recovered": 141,
+          "deceased": 258,
+          "country": "Singapore",
+          "lastUpdatedDate": "2020-09-16"
+        },
+        {
+          "infected": 402,        
+          "tested": 191,
+         "recovered": 99,
+          "deceased": 230,
+          "country": "Slovakia",
+          "lastUpdatedDate": "2022-11-20"
+        },
+        {
+          "infected": 414,
+          "tested": 603,
+          "recovered": 99,
+          "deceased": 272,
+          "country": "Slovenia",
+          "lastUpdatedDate": "2019-11-03"
+        },
+        {
+          "infected": 486,
+          "tested": 904,
+          "recovered": 992,
+          "deceased": 822,
+          "country": "South Korea",
+          "lastUpdatedDate": "2021-10-30"
+        }
+        
+      ]
   }
   
