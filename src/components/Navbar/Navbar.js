@@ -214,6 +214,15 @@ function Navbar() {
                     <ListItem>
                       <ListItemButton
                         component={Link}
+                        to="/Dashboard2"
+                        sx={{ display: { xs: "none", md: "block",marginLeft: "-35px", } }}
+                      >
+                        <ListItemText primary="Visualization" />
+                      </ListItemButton>
+                    </ListItem>
+                    <ListItem>
+                      <ListItemButton
+                        component={Link}
                         to="/employee"
                         sx={{
                           marginLeft: "-35px",

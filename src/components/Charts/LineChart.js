@@ -1,4 +1,4 @@
-import { Box, MenuItem, Select } from "@mui/material";
+import { Box, MenuItem, Select, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import {
@@ -16,10 +16,45 @@ import { saveAs } from "file-saver";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 
+
 const LineCharts = () => {
-  const [chartData, setChartData] = useState([]);
-  const [selectedOption, setSelectedOption] = useState("15"); // Default to 15 days
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false); // Dropdown open state
+  const [data, setData] = useState([]);
+  const [isInvalidFile, setIsInvalidFile] = useState(false);
+  const [selectedOption, setSelectedOption] = useState("7");
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const handleFileUpload = async (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onload = async (e) => {
+      const contents = e.target.result;
+      const rows = contents.split("\n");
+      const header = rows[0].split(",");
+
+      if (header.length < 2) {
+        setIsInvalidFile(true);
+        setData([]);
+        return;
+      }
+
+      const formattedData = await Promise.all(
+        rows.slice(1).map(async (row) => {
+          const values = row.split(",");
+          const obj = {};
+          header.forEach((key, index) => {
+            obj[key] = values[index];
+          });
+          return obj;
+        })
+      );
+
+      setData(formattedData);
+      setIsInvalidFile(false);
+    };
+
+    reader.readAsText(file);
+  };
 
   const handleOptionChange = (event) => {
     setSelectedOption(event.target.value);
@@ -29,83 +64,30 @@ const LineCharts = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  // downloaded format csv , png and pdf
   const handleDownload = (format) => {
-    if (format === "PNG") {
-      const lineChartContainer = document.getElementById(
-        "line-chart-container"
-      );
-      html2canvas(lineChartContainer).then((canvas) => {
-        canvas.toBlob((blob) => {
-          saveAs(blob, "line.png");
-        });
-      });
-    } else if (format === "PDF") {
-      const lineChartContainer = document.getElementById(
-        "line-chart-container"
-      );
-      html2canvas(lineChartContainer).then((canvas) => {
-        const imgData = canvas.toDataURL("image/png");
-        const pdf = new jsPDF();
-        pdf.addImage(imgData, "PNG", 0, 0, 200, 100);
-        pdf.save("chart.pdf");
-      });
-    } else if (format === "CSV") {
-      const csvData = chartData.map(
-        ({
-          country,
-          infected,
-          tested,
-          recovered,
-          deceased,
-          lastUpdatedDate,
-        }) => [country, infected, tested, recovered, deceased, lastUpdatedDate]
-      );
-      const csvRows = [
-        [
-          "Country",
-          "Infected",
-          "Tested",
-          "Recovered",
-          "Deceased",
-          "Last Updated Date",
-        ],
-        ...csvData,
-      ];
-      const csvContent = csvRows.map((row) => row.join(",")).join("\n");
-      const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8" });
-      saveAs(blob, "chart.csv");
+    if (data.length === 0) {
+      setIsInvalidFile(true);
+      return;
     }
+  
+    const filteredData = updateData(selectedOption); // Filter the data based on the selected number of days
+  
+    const dataToDownload = filteredData
+      .map((item) => Object.values(item).join(","))
+      .join("\n");
+    const element = document.createElement("a");
+    const file = new Blob([dataToDownload], { type: `text/${format}` });
+    element.href = URL.createObjectURL(file);
+    element.download = `data.${format}`;
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
   };
 
-  const fetchChartData = async () => {
-    try {
-      const response = await fetch("http://localhost:3006/data");
-      const data = await response.json();
-
-      const extractedData = data.map((item) => ({
-        country: item.country,
-        infected: item.infected,
-        recovered: item.recovered,
-        tested: item.tested,
-        deceased: item.deceased,
-        lastUpdatedDate: item.lastUpdatedDate,
-      }));
-
-      extractedData.sort(
-        (a, b) => new Date(b.lastUpdatedDate) - new Date(a.lastUpdatedDate)
-      );
-
-      const filteredData = extractedData.slice(0, parseInt(selectedOption));
-      setChartData(filteredData);
-    } catch (error) {
-      console.error(error);
-    }
+  const updateData = (value) => {
+    const filteredData = data.slice(-parseInt(value));
+    return filteredData;
   };
-
-  useEffect(() => {
-    fetchChartData();
-  }, [selectedOption]);
 
   return (
     <>
@@ -126,6 +108,7 @@ const LineCharts = () => {
             onClick={handleCloudDownloadClick}
           />
         </Box>
+
         {isDropdownOpen && (
           <Box
             sx={{
@@ -134,32 +117,77 @@ const LineCharts = () => {
               fontSize: "14px",
             }}
           >
-            <MenuItem value="PNG" onClick={() => handleDownload("PNG")}>
+            <MenuItem
+              value="PNG"
+              onClick={() => handleDownload("png")}
+              disabled={data.length === 0}
+            >
               PNG
             </MenuItem>
-            <MenuItem value="CSV" onClick={() => handleDownload("CSV")}>
-              CSV
+            <MenuItem
+              value="JSON"
+              onClick={() => handleDownload("json")}
+              disabled={data.length === 0}
+            >
+              JSON
             </MenuItem>
-            <MenuItem value="PDF" onClick={() => handleDownload("PDF")}>
-              PDF
+            <MenuItem
+              value="CSV"
+              onClick={() => handleDownload("csv")}
+              disabled={data.length === 0}
+            >
+              CSV
             </MenuItem>
           </Box>
         )}
         <br />
-        <ResponsiveContainer width="100%" aspect={2} id="line-chart-container">
-          <LineChart
-            data={chartData}
+        <input
+          type="file"
+          accept=".csv"
+          id="csv-file-input"
+          onChange={handleFileUpload}
+          style={{ display: "none" }}
+        />
+        <label htmlFor="csv-file-input">
+          <Box
+            component="span"
+            sx={{
+              display: "inline-block",
+              padding: "6px 12px",
+              backgroundColor: "#f5f5f5",
+              borderRadius: "4px",
+              cursor: "pointer",
+              userSelect: "none",
+              marginBottom: "16px",
+            }}
+          >
+            Upload CSV File
+          </Box>
+        </label>
+
+        <br />
+        {isInvalidFile && (
+          <Typography variant="body1" sx={{ color: "red" }}>
+            Please upload a valid CSV file
+          </Typography>
+        )}
+
+        {data.length > 0 && (
+        <ResponsiveContainer width="100%" aspect={2} >
+          <LineChart data={updateData(selectedOption)}
             margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="country" />
+            <XAxis dataKey={Object.keys(data[0])[0]}/>
             <YAxis />
             <Tooltip />
             <Legend />
-            <Line dataKey="infected" stroke="#3A7AE9" strokeWidth={3} />
-            <Line dataKey="recovered" stroke="#82ca9d" strokeWidth={3} />
+            <Line dataKey={Object.keys(data[0])[1]} stroke="#3F84FC" strokeWidth={3} />
+            <Line dataKey={Object.keys(data[0])[2]}  stroke="#82ca9d" strokeWidth={3} />
+            {/* <Line dataKey="recovered" stroke="#82ca9d" strokeWidth={3} /> */}
           </LineChart>
         </ResponsiveContainer>
+        )}
       </Box>
     </>
   );

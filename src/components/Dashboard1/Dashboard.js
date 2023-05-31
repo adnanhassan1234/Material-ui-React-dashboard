@@ -11,14 +11,15 @@ import {
 } from "@mui/material";
 import styled from "styled-components";
 // import { Coronavirus } from "@mui/icons-material";
+
 import axios from "axios";
-import DashboardCards from "./DashboardCards";
-import ChartsTableData from "../Charts/ChartsTableData";
 import NorthOutlinedIcon from '@mui/icons-material/NorthOutlined';
 import ArrowDownwardOutlinedIcon from '@mui/icons-material/ArrowDownwardOutlined';
 import ArrowUpwardOutlinedIcon from '@mui/icons-material/ArrowUpwardOutlined';
-import BarCharts from "../Charts/Barchart";
-import LineCharts from "../Charts/LineChart";
+import BarCharts from "../Charts2/Barchart";
+import LineCharts from "../Charts2/LineChart";
+import ChartsTableData from "../Charts2/ChartsTableData";
+import DashboardCards from "./DashboardCards";
 
 
 const Dashboard = () => {

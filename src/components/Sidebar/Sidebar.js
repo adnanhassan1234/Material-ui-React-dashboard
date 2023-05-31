@@ -59,6 +59,14 @@ export default function Sidebar() {
                 </ListItemButton>
               </ListItem>
               <ListItem disablePadding>
+                <ListItemButton component={Link} to="/dashboard2">
+                  <ListItemIcon>
+                 <HomeRoundedIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Visualization" />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
                 <ListItemButton component={Link} to="/employee">
                   <ListItemIcon>
                  <SettingsAccessibilityIcon />
@@ -150,6 +158,14 @@ export default function Sidebar() {
                  <HomeRoundedIcon />
                   </ListItemIcon>
                   <ListItemText primary="Dashboard" />
+                </ListItemButton>
+              </ListItem>
+              <ListItem disablePadding>
+                <ListItemButton component={Link} to="/2">
+                  <ListItemIcon>
+                 <HomeRoundedIcon />
+                  </ListItemIcon>
+                  <ListItemText primary="Visualization" />
                 </ListItemButton>
               </ListItem>
               <ListItem disablePadding>
