@@ -11,12 +11,14 @@ import {
   ResponsiveContainer,
 } from "recharts";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
+import { useSnackbar } from "notistack";
 
 const BarCharts = () => {
   const [data, setData] = useState([]);
   const [isInvalidFile, setIsInvalidFile] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState("7");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleFileUploads = async (event) => {
     const file = event.target.files[0];
@@ -30,7 +32,22 @@ const BarCharts = () => {
       if (header.length < 2) {
         setIsInvalidFile(true);
         setData([]);
+        enqueueSnackbar("Please upload a valid CSV file", {
+          variant: "error",
+          anchorOrigin: {
+            vertical: "bottom",
+            horizontal: "right",
+          },
+        });
         return;
+      } else {
+        enqueueSnackbar("CSV file uploaded successfully!", {
+          variant: "success",
+          anchorOrigin: {
+            vertical: "bottom",
+            horizontal: "right",
+          },
+        });
       }
 
       const formatedData = await Promise.all(

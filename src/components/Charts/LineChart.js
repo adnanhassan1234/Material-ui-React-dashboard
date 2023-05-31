@@ -12,9 +12,7 @@ import {
   ResponsiveContainer,
   Line,
 } from "recharts";
-import { saveAs } from "file-saver";
-import html2canvas from "html2canvas";
-import jsPDF from "jspdf";
+import { useSnackbar } from "notistack";
 
 
 const LineCharts = () => {
@@ -22,6 +20,7 @@ const LineCharts = () => {
   const [isInvalidFile, setIsInvalidFile] = useState(false);
   const [selectedOption, setSelectedOption] = useState("7");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const { enqueueSnackbar } = useSnackbar();
 
   const handleFileUpload = async (event) => {
     const file = event.target.files[0];
@@ -35,7 +34,22 @@ const LineCharts = () => {
       if (header.length < 2) {
         setIsInvalidFile(true);
         setData([]);
+        enqueueSnackbar("Please upload a valid CSV file", {
+          variant: "error",
+          anchorOrigin: {
+            vertical: "bottom",
+            horizontal: "right",
+          },
+        });
         return;
+      } else {
+        enqueueSnackbar("CSV file uploaded successfully!", {
+          variant: "success",
+          anchorOrigin: {
+            vertical: "bottom",
+            horizontal: "right",
+          },
+        });
       }
 
       const formattedData = await Promise.all(
@@ -69,9 +83,9 @@ const LineCharts = () => {
       setIsInvalidFile(true);
       return;
     }
-  
+
     const filteredData = updateData(selectedOption); // Filter the data based on the selected number of days
-  
+
     const dataToDownload = filteredData
       .map((item) => Object.values(item).join(","))
       .join("\n");
@@ -173,20 +187,29 @@ const LineCharts = () => {
         )}
 
         {data.length > 0 && (
-        <ResponsiveContainer width="100%" aspect={2} >
-          <LineChart data={updateData(selectedOption)}
-            margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey={Object.keys(data[0])[0]}/>
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Line dataKey={Object.keys(data[0])[1]} stroke="#3F84FC" strokeWidth={3} />
-            <Line dataKey={Object.keys(data[0])[2]}  stroke="#82ca9d" strokeWidth={3} />
-            {/* <Line dataKey="recovered" stroke="#82ca9d" strokeWidth={3} /> */}
-          </LineChart>
-        </ResponsiveContainer>
+          <ResponsiveContainer width="100%" aspect={2}>
+            <LineChart
+              data={updateData(selectedOption)}
+              margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+            >
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey={Object.keys(data[0])[0]} />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Line
+                dataKey={Object.keys(data[0])[1]}
+                stroke="#3F84FC"
+                strokeWidth={3}
+              />
+              <Line
+                dataKey={Object.keys(data[0])[2]}
+                stroke="#82ca9d"
+                strokeWidth={3}
+              />
+              {/* <Line dataKey="recovered" stroke="#82ca9d" strokeWidth={3} /> */}
+            </LineChart>
+          </ResponsiveContainer>
         )}
       </Box>
     </>
