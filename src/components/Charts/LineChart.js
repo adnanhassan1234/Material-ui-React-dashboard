@@ -1,4 +1,3 @@
-import { Box, MenuItem, Select, Typography } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import {
@@ -13,16 +12,34 @@ import {
   Line,
 } from "recharts";
 import { useSnackbar } from "notistack";
-
+import {
+  Box,
+  Typography,
+  Select,
+  MenuItem,
+  TableContainer,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  TablePagination,
+  TextField,
+  Button,
+} from "@mui/material";
 
 const LineCharts = () => {
   const [data, setData] = useState([]);
-  const [isInvalidFile, setIsInvalidFile] = useState(false);
+  const [isInvalidFiles, setIsInvalidFiles] = useState(false);
   const [selectedOption, setSelectedOption] = useState("7");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
+  const [tableData, setTableData] = useState([]);
+  // Pagination state variables
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5); // Number of rows per page
 
-  const handleFileUpload = async (event) => {
+  const handleFileUploads = async (event) => {
     const file = event.target.files[0];
     const reader = new FileReader();
 
@@ -32,7 +49,7 @@ const LineCharts = () => {
       const header = rows[0].split(",");
 
       if (header.length < 2) {
-        setIsInvalidFile(true);
+        setIsInvalidFiles(true);
         setData([]);
         enqueueSnackbar("Please upload a valid CSV file", {
           variant: "error",
@@ -52,7 +69,7 @@ const LineCharts = () => {
         });
       }
 
-      const formattedData = await Promise.all(
+      const formatedData = await Promise.all(
         rows.slice(1).map(async (row) => {
           const values = row.split(",");
           const obj = {};
@@ -63,8 +80,8 @@ const LineCharts = () => {
         })
       );
 
-      setData(formattedData);
-      setIsInvalidFile(false);
+      setData(formatedData);
+      setIsInvalidFiles(false);
     };
 
     reader.readAsText(file);
@@ -80,7 +97,7 @@ const LineCharts = () => {
 
   const handleDownload = (format) => {
     if (data.length === 0) {
-      setIsInvalidFile(true);
+      setIsInvalidFiles(true);
       return;
     }
 
@@ -101,6 +118,24 @@ const LineCharts = () => {
   const updateData = (value) => {
     const filteredData = data.slice(-parseInt(value));
     return filteredData;
+  };
+
+  useEffect(() => {
+    if (data.length > 0) {
+      const filteredData = updateData(selectedOption);
+      setTableData(filteredData);
+    }
+  }, [data, selectedOption]);
+
+  // Pagination event handlers
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    const newRowsPerPage = parseInt(event.target.value, 10);
+    setRowsPerPage(newRowsPerPage);
+    setPage(0);
   };
 
   return (
@@ -159,7 +194,7 @@ const LineCharts = () => {
           type="file"
           accept=".csv"
           id="csv-file-input"
-          onChange={handleFileUpload}
+          onChange={handleFileUploads}
           style={{ display: "none" }}
         />
         <label htmlFor="csv-file-input">
@@ -180,7 +215,7 @@ const LineCharts = () => {
         </label>
 
         <br />
-        {isInvalidFile && (
+        {isInvalidFiles && (
           <Typography variant="body1" sx={{ color: "red" }}>
             Please upload a valid CSV file
           </Typography>
@@ -210,6 +245,51 @@ const LineCharts = () => {
               {/* <Line dataKey="recovered" stroke="#82ca9d" strokeWidth={3} /> */}
             </LineChart>
           </ResponsiveContainer>
+        )}
+        {/* dataTable show */}
+        {tableData.length > 0 && (
+          <Typography color="text.primary" variant="h6">
+            Analytics Report
+          </Typography>
+        )}
+        {tableData.length > 0 && (
+          <Box sx={{ overflowY: "scroll" }}>
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>#</TableCell>
+                    {Object.keys(tableData[0]).map((key) => (
+                      <TableCell key={key}>{key}</TableCell>
+                    ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {tableData
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((item, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{index + 1}</TableCell>
+                        {Object.values(item).map((value, idx) => (
+                          <TableCell key={idx}>{value}</TableCell>
+                        ))}
+                      </TableRow>
+                    ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            {tableData.length > 0 && (
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25]}
+                component="div"
+                count={tableData.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
+            )}
+          </Box>
         )}
       </Box>
     </>

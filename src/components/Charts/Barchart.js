@@ -1,5 +1,19 @@
-import { Box, Typography, Select, MenuItem } from "@mui/material";
-import React, { useState } from "react";
+import {
+  Box,
+  Typography,
+  Select,
+  MenuItem,
+  TableContainer,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  TablePagination,
+  TextField,
+  Button,
+} from "@mui/material";
+import React, { useState, useEffect } from "react";
 import {
   BarChart,
   Bar,
@@ -19,6 +33,10 @@ const BarCharts = () => {
   const [selectedOptions, setSelectedOptions] = useState("7");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { enqueueSnackbar } = useSnackbar();
+  const [tableData, setTableData] = useState([]);
+  // Pagination state variables
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5); // Number of rows per page
 
   const handleFileUploads = async (event) => {
     const file = event.target.files[0];
@@ -99,6 +117,24 @@ const BarCharts = () => {
   const updateData = (value) => {
     const filteredData = data.slice(-parseInt(value));
     return filteredData;
+  };
+
+  useEffect(() => {
+    if (data.length > 0) {
+      const filteredData = updateData(selectedOptions);
+      setTableData(filteredData);
+    }
+  }, [data, selectedOptions]);
+
+  // Pagination event handlers
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    const newRowsPerPage = parseInt(event.target.value, 10);
+    setRowsPerPage(newRowsPerPage);
+    setPage(0);
   };
 
   return (
@@ -184,6 +220,7 @@ const BarCharts = () => {
           </Typography>
         )}
 
+        {/* barchart */}
         {data.length > 0 && (
           <ResponsiveContainer width="100%" aspect={2}>
             <BarChart data={updateData(selectedOptions)}>
@@ -196,6 +233,51 @@ const BarCharts = () => {
               <Bar dataKey={Object.keys(data[0])[2]} fill="#82ca9d" />
             </BarChart>
           </ResponsiveContainer>
+        )}
+        {/* dataTable show */}
+        {tableData.length > 0 && (
+          <Typography color="text.primary" variant="h6">
+            Analytics Report
+          </Typography>
+        )}
+        {tableData.length > 0 && (
+          <Box sx={{ overflowY: "scroll" }}>
+            <TableContainer>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell>#</TableCell>
+                    {Object.keys(tableData[0]).map((key) => (
+                      <TableCell key={key}>{key}</TableCell>
+                    ))}
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {tableData
+                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                    .map((item, index) => (
+                      <TableRow key={index}>
+                        <TableCell>{index + 1}</TableCell>
+                        {Object.values(item).map((value, idx) => (
+                          <TableCell key={idx}>{value}</TableCell>
+                        ))}
+                      </TableRow>
+                    ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            {tableData.length > 0 && (
+              <TablePagination
+                rowsPerPageOptions={[5, 10, 25]}
+                component="div"
+                count={tableData.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+              />
+            )}
+          </Box>
         )}
       </Box>
     </>
