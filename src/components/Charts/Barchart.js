@@ -154,7 +154,6 @@ const BarCharts = () => {
             <MenuItem value="bar">Bar Chart</MenuItem>
             <MenuItem value="area">Area Chart</MenuItem>
             <MenuItem value="line">Line Chart</MenuItem>
-            <MenuItem value="pie">Pie Chart</MenuItem>
           </Select>
           <CloudDownloadIcon
             sx={{ fontSize: "33px", color: "#3A7AE9" }}
@@ -264,11 +263,13 @@ const BarCharts = () => {
                 type="monotone"
                 dataKey={Object.keys(data[0])[1]}
                 stroke="#3F84FC"
+                strokeWidth={3}
               />
               <Line
                 type="monotone"
                 dataKey={Object.keys(data[0])[2]}
                 stroke="#82ca9d"
+                strokeWidth={3}
               />
             </LineChart>
           </ResponsiveContainer>
@@ -306,6 +307,7 @@ const BarCharts = () => {
             <Table>
               <TableHead>
                 <TableRow>
+                  <TableCell>#</TableCell>
                   {Object.keys(tableData[0]).map((header, index) => (
                     <TableCell key={index}>{header}</TableCell>
                   ))}
@@ -316,6 +318,7 @@ const BarCharts = () => {
                   .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                   .map((row, index) => (
                     <TableRow key={index}>
+                      <TableCell>{page * rowsPerPage + index + 1}</TableCell>
                       {Object.values(row).map((value, index) => (
                         <TableCell key={index}>{value}</TableCell>
                       ))}
