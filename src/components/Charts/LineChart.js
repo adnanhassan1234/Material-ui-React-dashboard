@@ -259,19 +259,19 @@ const LineCharts = () => {
                 <TableHead>
                   <TableRow>
                     <TableCell>#</TableCell>
-                    {Object.keys(tableData[0]).map((key) => (
-                      <TableCell key={key}>{key}</TableCell>
+                    {Object.keys(tableData[0]).map((header, index) => (
+                      <TableCell key={index}>{header}</TableCell>
                     ))}
                   </TableRow>
                 </TableHead>
                 <TableBody>
                   {tableData
                     .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((item, index) => (
+                    .map((row, index) => (
                       <TableRow key={index}>
-                        <TableCell>{index + 1}</TableCell>
-                        {Object.values(item).map((value, idx) => (
-                          <TableCell key={idx}>{value}</TableCell>
+                        <TableCell>{page * rowsPerPage + index + 1}</TableCell>
+                        {Object.values(row).map((value, index) => (
+                          <TableCell key={index}>{value}</TableCell>
                         ))}
                       </TableRow>
                     ))}
