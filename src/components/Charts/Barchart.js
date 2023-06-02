@@ -19,18 +19,19 @@ import {
   Line,
   AreaChart,
   Area,
-  Pie,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
   Legend,
   ResponsiveContainer,
-  PieChart,
   Cell,
 } from "recharts";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import { useSnackbar } from "notistack";
+import html2canvas from "html2canvas";
+import { saveAs } from "file-saver";
+import jsPDF from "jspdf";
 
 const BarCharts = () => {
   const [data, setData] = useState([]);
@@ -43,6 +44,7 @@ const BarCharts = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [visualizationType, setVisualizationType] = useState("bar");
 
+  // csv file upload
   const handleFileUploads = async (event) => {
     const file = event.target.files[0];
     const reader = new FileReader();
@@ -73,6 +75,7 @@ const BarCharts = () => {
         });
       }
 
+      /*  formatting the data from a CSV file into an array of objects. */
       const formatedData = await Promise.all(
         rows.slice(1).map(async (row) => {
           const values = row.split(",");
@@ -84,11 +87,66 @@ const BarCharts = () => {
         })
       );
 
-      setData(formatedData);
+      setData(formatedData); // save all csv data in state
       setIsInvalidFile(false);
     };
 
     reader.readAsText(file);
+  };
+
+  // Save the PDF
+  const downloadAsPDF = () => {
+    const chartContainer = document.getElementById("chart-container");
+    const doc = new jsPDF("p", "mm", "a4");
+    html2canvas(chartContainer).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const imgWidth = 210; // A4 width
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      doc.addImage(imgData, "PNG", 0, 0, imgWidth, imgHeight);
+      doc.save("chart.pdf");
+    });
+  };
+
+  // downloadAsPNG format
+  const downloadAsPNG = () => {
+    const container = document.getElementById("chart-container");
+    html2canvas(container).then((canvas) => {
+      const link = document.createElement("a");
+      link.href = canvas.toDataURL("image/png");
+      link.download = "chart.png";
+      link.click();
+    });
+  };
+
+  // download csv and JSON
+  const handleDownloads = (format) => {
+    if (data.length === 0) {
+      setIsInvalidFile(true);
+      return;
+    }
+    const filteredData = updateData(selectedOptions);
+    if (format === "json") {
+      const jsonData = JSON.stringify(filteredData);
+      const element = document.createElement("a");
+      const file = new Blob([jsonData], { type: "application/json" });
+      element.href = URL.createObjectURL(file);
+      element.download = "data.json";
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    } else if (format === "csv") {
+      const csvContent = [
+        Object.keys(filteredData[0]).join(","),
+        ...filteredData.map((item) => Object.values(item).join(",")),
+      ].join("\n");
+      const element = document.createElement("a");
+      const file = new Blob([csvContent], { type: "text/csv" });
+      element.href = URL.createObjectURL(file);
+      element.download = "data.csv";
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    }
   };
 
   const handleOptionChange = (event) => {
@@ -97,26 +155,6 @@ const BarCharts = () => {
 
   const handleCloudDownloadClick = () => {
     setIsDropdownOpen(!isDropdownOpen);
-  };
-
-  const handleDownloads = (format) => {
-    if (data.length === 0) {
-      setIsInvalidFile(true);
-      return;
-    }
-
-    const filteredData = updateData(selectedOptions);
-
-    const dataToDownload = filteredData
-      .map((item) => Object.values(item).join(","))
-      .join("\n");
-    const element = document.createElement("a");
-    const file = new Blob([dataToDownload], { type: `text/${format}` });
-    element.href = URL.createObjectURL(file);
-    element.download = `data.${format}`;
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
   };
 
   const updateData = (value) => {
@@ -162,6 +200,7 @@ const BarCharts = () => {
         </Box>
         {isDropdownOpen && (
           <Box
+            // id="chart-container"
             sx={{
               display: "flex",
               justifyContent: "flex-end",
@@ -170,10 +209,17 @@ const BarCharts = () => {
           >
             <MenuItem
               value="PNG"
-              onClick={() => handleDownloads("png")}
+              onClick={downloadAsPNG}
               disabled={data.length === 0}
             >
               PNG
+            </MenuItem>
+            <MenuItem
+              value="PDF"
+              onClick={downloadAsPDF}
+              disabled={data.length === 0}
+            >
+              PDF
             </MenuItem>
             <MenuItem
               value="JSON"
@@ -238,7 +284,7 @@ const BarCharts = () => {
         <br />
         {/* Bar charts */}
         {visualizationType === "bar" && data.length > 0 && (
-          <ResponsiveContainer width="100%" aspect={2}>
+          <ResponsiveContainer width="100%" aspect={2} id="chart-container">
             <BarChart data={updateData(selectedOptions)}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey={Object.keys(data[0])[0]} />
@@ -252,7 +298,7 @@ const BarCharts = () => {
         )}
         {/* Line Charts */}
         {visualizationType === "line" && data.length > 0 && (
-          <ResponsiveContainer width="100%" aspect={2}>
+          <ResponsiveContainer width="100%" aspect={2} id="chart-container">
             <LineChart data={updateData(selectedOptions)}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey={Object.keys(data[0])[0]} />
@@ -276,7 +322,7 @@ const BarCharts = () => {
         )}
         {/* Area chart */}
         {visualizationType === "area" && data.length > 0 && (
-          <ResponsiveContainer width="100%" aspect={2}>
+          <ResponsiveContainer width="100%" aspect={2} id="chart-container">
             <AreaChart data={updateData(selectedOptions)}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey={Object.keys(data[0])[0]} />
