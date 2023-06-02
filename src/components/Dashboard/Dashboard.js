@@ -22,12 +22,7 @@ import BarCharts from "../Charts/BarCharts";
 const Dashboard = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-  // const [leaveEmployee] = useState(adminLeaveData);
-
-  // const handleDownload = () => {
-  //   // Logic for downloading the charts
-  // };
-
+  
   const fetchData = async () => {
     try {
       const response = await axios.get("http://localhost:3006/data"); // Replace 'API_URL' with the actual endpoint URL

@@ -38,7 +38,6 @@ import SimCardDownloadRoundedIcon from "@mui/icons-material/SimCardDownloadRound
 import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 import VisualizationTable from "./VisualizationTable";
 
-
 const BarCharts = () => {
   const [data, setData] = useState([]);
   const [isInvalidFile, setIsInvalidFile] = useState(false);
@@ -124,7 +123,7 @@ const BarCharts = () => {
     });
   };
 
-  // download csv and JSON
+  // download csv and JSON file
   const handleDownloads = (format) => {
     if (data.length === 0) {
       setIsInvalidFile(true);
@@ -228,6 +227,7 @@ const BarCharts = () => {
               value="PDF"
               onClick={downloadAsPDF}
               disabled={data.length === 0}
+              size="small"
             >
               <PictureAsPdf />
               PDF
@@ -309,6 +309,7 @@ const BarCharts = () => {
               <Legend />
               <Bar dataKey={Object.keys(data[0])[1]} fill="#3F84FC" />
               <Bar dataKey={Object.keys(data[0])[2]} fill="#82ca9d" />
+              <Bar dataKey={Object.keys(data[0])[3]} fill="#FF6C37" />
             </BarChart>
           </ResponsiveContainer>
         )}
@@ -331,6 +332,12 @@ const BarCharts = () => {
                 type="monotone"
                 dataKey={Object.keys(data[0])[2]}
                 stroke="#82ca9d"
+                strokeWidth={3}
+              />
+              <Line
+                type="monotone"
+                dataKey={Object.keys(data[0])[3]}
+                stroke="#FF6C37"
                 strokeWidth={3}
               />
             </LineChart>
@@ -356,6 +363,12 @@ const BarCharts = () => {
                 dataKey={Object.keys(data[0])[2]}
                 fill="#82ca9d"
                 stroke="#82ca9d"
+              />
+              <Area
+                type="monotone"
+                dataKey={Object.keys(data[0])[3]}
+                fill="#FF6C37"
+                stroke="#FF6C37"
               />
             </AreaChart>
           </ResponsiveContainer>
