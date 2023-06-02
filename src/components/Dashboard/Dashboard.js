@@ -13,12 +13,11 @@ import styled from "styled-components";
 // import { Coronavirus } from "@mui/icons-material";
 import axios from "axios";
 import DashboardCards from "./DashboardCards";
-import ChartsTableData from "../Charts/ChartsTableData";
 import NorthOutlinedIcon from '@mui/icons-material/NorthOutlined';
 import ArrowDownwardOutlinedIcon from '@mui/icons-material/ArrowDownwardOutlined';
 import ArrowUpwardOutlinedIcon from '@mui/icons-material/ArrowUpwardOutlined';
-import BarCharts from "../Charts/Barchart";
 import LineCharts from "../Charts/LineChart";
+import BarCharts from "../Charts/BarCharts";
 
 
 const Dashboard = () => {
@@ -106,38 +105,14 @@ const Dashboard = () => {
       {/* dashboard cards crona patients */}
       <Box className="charts_tabs" my={5}>
         <Container>
-          {/* <Grid item xs={12} sm={6}>
-            <TextField
-              id="date"
-              label="Select Date"
-              type="date"
-              InputLabelProps={{
-                shrink: true,
-              }}
-              // fullWidth
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={handleDownload}
-              // fullWidth
-            >
-              Download
-            </Button>
-          </Grid> */}
           <Grid container spacing={2}>
             {/* here date filed and download button in right side */}
             <Grid item lg={12} md={12} sm={12} xs={12}>
               <BarCharts />
             </Grid>
-            <Grid item lg={12} md={12} sm={12} xs={12}>
+            {/* <Grid item lg={12} md={12} sm={12} xs={12}>
               <LineCharts />
-            </Grid>
-            <Grid item lg={12}>
-              {/* <ChartsTableData /> */}
-            </Grid>
+            </Grid> */}
           </Grid>
         </Container>
       </Box>

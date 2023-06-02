@@ -10,6 +10,7 @@ import {
   TableRow,
   TableCell,
   TablePagination,
+  IconButton,
 } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import {
@@ -30,8 +31,13 @@ import {
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import { useSnackbar } from "notistack";
 import html2canvas from "html2canvas";
-import { saveAs } from "file-saver";
 import jsPDF from "jspdf";
+import { CloudDownload, PictureAsPdf, GetApp } from "@mui/icons-material";
+import FileUploadRoundedIcon from "@mui/icons-material/FileUploadRounded";
+import SimCardDownloadRoundedIcon from "@mui/icons-material/SimCardDownloadRounded";
+import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
+import VisualizationTable from "./VisualizationTable";
+
 
 const BarCharts = () => {
   const [data, setData] = useState([]);
@@ -181,13 +187,16 @@ const BarCharts = () => {
 
   return (
     <>
+      <Typography variant="h5" sx={{ marginBottom: "1rem" }}>
+        Data Visualization
+      </Typography>
       <Box sx={{ p: 2, backgroundColor: "white", borderRadius: "4px" }}>
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
           {/* Charts catagory types */}
           <Select
             value={visualizationType}
             onChange={(event) => setVisualizationType(event.target.value)}
-            sx={{ height: "35px", width: "143px" }}
+            sx={{ height: "43px", width: "185px" }}
           >
             <MenuItem value="bar">Bar Chart</MenuItem>
             <MenuItem value="area">Area Chart</MenuItem>
@@ -212,6 +221,7 @@ const BarCharts = () => {
               onClick={downloadAsPNG}
               disabled={data.length === 0}
             >
+              <DownloadRoundedIcon />
               PNG
             </MenuItem>
             <MenuItem
@@ -219,6 +229,7 @@ const BarCharts = () => {
               onClick={downloadAsPDF}
               disabled={data.length === 0}
             >
+              <PictureAsPdf />
               PDF
             </MenuItem>
             <MenuItem
@@ -226,6 +237,7 @@ const BarCharts = () => {
               onClick={() => handleDownloads("json")}
               disabled={data.length === 0}
             >
+              <SimCardDownloadRoundedIcon />
               JSON
             </MenuItem>
             <MenuItem
@@ -233,6 +245,7 @@ const BarCharts = () => {
               onClick={() => handleDownloads("csv")}
               disabled={data.length === 0}
             >
+              <SimCardDownloadRoundedIcon />
               CSV
             </MenuItem>
           </Box>
@@ -259,6 +272,9 @@ const BarCharts = () => {
                 marginBottom: "16px",
               }}
             >
+              <IconButton component="span" color="primary">
+                <FileUploadRoundedIcon />
+              </IconButton>
               Upload CSV File
             </Box>
           </label>
@@ -272,7 +288,7 @@ const BarCharts = () => {
             <Select
               value={selectedOptions}
               onChange={handleOptionChange}
-              sx={{ height: "35px", width: "143px" }}
+              sx={{ height: "43px", width: "187px" }}
             >
               <MenuItem value="7">Last 7 Days</MenuItem>
               <MenuItem value="10">Last 10 Days</MenuItem>
@@ -350,28 +366,12 @@ const BarCharts = () => {
             <Typography color="text.primary" variant="h6">
               Analytics Report
             </Typography>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell>#</TableCell>
-                  {Object.keys(tableData[0]).map((header, index) => (
-                    <TableCell key={index}>{header}</TableCell>
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {tableData
-                  .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                  .map((row, index) => (
-                    <TableRow key={index}>
-                      <TableCell>{page * rowsPerPage + index + 1}</TableCell>
-                      {Object.values(row).map((value, index) => (
-                        <TableCell key={index}>{value}</TableCell>
-                      ))}
-                    </TableRow>
-                  ))}
-              </TableBody>
-            </Table>
+            {/* data table */}
+            <VisualizationTable
+              tableData={tableData}
+              rowsPerPage={rowsPerPage}
+              page={page}
+            />
             <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               component="div"
