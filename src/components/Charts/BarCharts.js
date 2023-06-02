@@ -366,7 +366,7 @@ const BarCharts = () => {
             <Typography color="text.primary" variant="h6">
               Analytics Report
             </Typography>
-            {/* data table */}
+            {/* Visualization Table */}
             <VisualizationTable
               tableData={tableData}
               rowsPerPage={rowsPerPage}

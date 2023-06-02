@@ -16,7 +16,6 @@ import DashboardCards from "./DashboardCards";
 import NorthOutlinedIcon from '@mui/icons-material/NorthOutlined';
 import ArrowDownwardOutlinedIcon from '@mui/icons-material/ArrowDownwardOutlined';
 import ArrowUpwardOutlinedIcon from '@mui/icons-material/ArrowUpwardOutlined';
-import LineCharts from "../Charts/LineChart";
 import BarCharts from "../Charts/BarCharts";
 
 
@@ -110,9 +109,6 @@ const Dashboard = () => {
             <Grid item lg={12} md={12} sm={12} xs={12}>
               <BarCharts />
             </Grid>
-            {/* <Grid item lg={12} md={12} sm={12} xs={12}>
-              <LineCharts />
-            </Grid> */}
           </Grid>
         </Container>
       </Box>
