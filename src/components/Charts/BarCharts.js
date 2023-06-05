@@ -37,6 +37,29 @@ import FileUploadRoundedIcon from "@mui/icons-material/FileUploadRounded";
 import SimCardDownloadRoundedIcon from "@mui/icons-material/SimCardDownloadRounded";
 import DownloadRoundedIcon from "@mui/icons-material/DownloadRounded";
 import VisualizationTable from "./VisualizationTable";
+import { styled } from "@mui/system";
+
+const StyledBox = styled(Box)`
+  display: inline-block;
+  padding: 6px 12px;
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+  margin-bottom: 16px;
+`;
+
+const chartCategory = [
+  { value: "bar", label: "Bar Chart" },
+  { value: "area", label: "Area Chart" },
+  { value: "line", label: "Line Chart" },
+];
+const daysPerData = [
+  { value: "7", label: "Last 7 Days" },
+  { value: "10", label: "Last 10 Days" },
+  { value: "15", label: "Last 15 Days" },
+  { value: "30", label: "Last 30 Days" },
+];
 
 const BarCharts = () => {
   const [data, setData] = useState([]);
@@ -184,6 +207,22 @@ const BarCharts = () => {
     setPage(0);
   };
 
+  // DownloadFormat Data options like PNG, PDF , CSV and JSON
+  const DownloadFormatData = [
+    { value: "PNG", onClick: downloadAsPNG, icon: <DownloadRoundedIcon /> },
+    { value: "PDF", onClick: downloadAsPDF, icon: <PictureAsPdf /> },
+    {
+      value: "JSON",
+      onClick: () => handleDownloads("json"),
+      icon: <SimCardDownloadRoundedIcon />,
+    },
+    {
+      value: "CSV",
+      onClick: () => handleDownloads("csv"),
+      icon: <SimCardDownloadRoundedIcon />,
+    },
+  ];
+
   return (
     <>
       <Typography variant="h5" sx={{ marginBottom: "1rem" }}>
@@ -191,15 +230,17 @@ const BarCharts = () => {
       </Typography>
       <Box sx={{ p: 2, backgroundColor: "white", borderRadius: "4px" }}>
         <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          {/* Charts catagory types */}
+          {/* Charts category types */}
           <Select
             value={visualizationType}
             onChange={(event) => setVisualizationType(event.target.value)}
             sx={{ height: "43px", width: "185px" }}
           >
-            <MenuItem value="bar">Bar Chart</MenuItem>
-            <MenuItem value="area">Area Chart</MenuItem>
-            <MenuItem value="line">Line Chart</MenuItem>
+            {chartCategory.map((option) => (
+              <MenuItem key={option.value} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
           </Select>
           <CloudDownloadIcon
             sx={{ fontSize: "33px", color: "#3A7AE9" }}
@@ -215,39 +256,17 @@ const BarCharts = () => {
               fontSize: "14px",
             }}
           >
-            <MenuItem
-              value="PNG"
-              onClick={downloadAsPNG}
-              disabled={data.length === 0}
-            >
-              <DownloadRoundedIcon />
-              PNG
-            </MenuItem>
-            <MenuItem
-              value="PDF"
-              onClick={downloadAsPDF}
-              disabled={data.length === 0}
-              size="small"
-            >
-              <PictureAsPdf />
-              PDF
-            </MenuItem>
-            <MenuItem
-              value="JSON"
-              onClick={() => handleDownloads("json")}
-              disabled={data.length === 0}
-            >
-              <SimCardDownloadRoundedIcon />
-              JSON
-            </MenuItem>
-            <MenuItem
-              value="CSV"
-              onClick={() => handleDownloads("csv")}
-              disabled={data.length === 0}
-            >
-              <SimCardDownloadRoundedIcon />
-              CSV
-            </MenuItem>
+            {DownloadFormatData.map((item) => (
+              <MenuItem
+                key={item.value}
+                value={item.value}
+                onClick={item.onClick}
+                disabled={data.length === 0}
+              >
+                {item.icon}
+                {item.value}
+              </MenuItem>
+            ))}
           </Box>
         )}
         <br />
@@ -260,23 +279,13 @@ const BarCharts = () => {
             style={{ display: "none" }}
           />
           <label htmlFor="csv-file-inputs">
-            <Box
-              component="span"
-              sx={{
-                display: "inline-block",
-                padding: "6px 12px",
-                backgroundColor: "#f5f5f5",
-                borderRadius: "4px",
-                cursor: "pointer",
-                userSelect: "none",
-                marginBottom: "16px",
-              }}
+            <StyledBox component="span"
             >
               <IconButton component="span" color="primary">
                 <FileUploadRoundedIcon />
               </IconButton>
               Upload CSV File
-            </Box>
+            </StyledBox>
           </label>
 
           {isInvalidFile && (
@@ -284,19 +293,21 @@ const BarCharts = () => {
               Please upload a valid CSV file
             </Typography>
           )}
+          {/* Days per Data show */}
           {tableData.length > 0 && (
             <Select
               value={selectedOptions}
               onChange={handleOptionChange}
               sx={{ height: "43px", width: "187px" }}
             >
-              <MenuItem value="7">Last 7 Days</MenuItem>
-              <MenuItem value="10">Last 10 Days</MenuItem>
-              <MenuItem value="15">Last 15 Days</MenuItem>
-              <MenuItem value="30">Last 30 Days</MenuItem>
+              {daysPerData.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
             </Select>
           )}
-        </Box>{" "}
+        </Box>
         <br />
         {/* Bar charts */}
         {visualizationType === "bar" && data.length > 0 && (

@@ -12,21 +12,22 @@ import Dashboard from "./components/Dashboard/Dashboard";
 import Dashboard2 from "./components/Dashboard1/Dashboard";
 
 function App() {
-
   const mobileScreen = useSelector((state) => state.dashboard.mobileView);
-  
+
   return (
     <Router>
-    {
-      mobileScreen?
       <div>
         <Sidebar />
         <div
-          style={{
-            marginLeft: "244px",
-            marginTop: "108px",
-            marginRight: "3px",
-          }}
+          style={
+            mobileScreen
+              ? {
+                  marginLeft: "244px",
+                  marginTop: "108px",
+                  marginRight: "3px",
+                }
+              : { marginTop: "108px" }
+          }
         >
           <Routes>
             <Route path="/" element={<Dashboard />} />
@@ -38,27 +39,7 @@ function App() {
             {/* add more routes here */}
           </Routes>
         </div>
-      </div>:
-      <div>
-        <Sidebar />
-        <div
-          style={{
-            marginTop: "108px",
-          }}
-        >
-          <Routes>
-          <Route path="/" element={<Dashboard />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/service" element={<Service />} />
-            <Route path="/employee" element={<Employee />} />
-            <Route path="/leaves-admin" element={<LeaveAdmin />} />
-            <Route path="/dashboard2" element={<Dashboard2 />} />
-            {/* add more routes here */}
-          </Routes>
-        </div>
       </div>
-    }
-     
     </Router>
   );
 }
