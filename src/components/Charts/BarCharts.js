@@ -146,35 +146,30 @@ const BarCharts = () => {
     });
   };
 
-  // download csv and JSON file
+  // download CSV and JSON file
   const handleDownloads = (format) => {
     if (data.length === 0) {
       setIsInvalidFile(true);
       return;
     }
     const filteredData = updateData(selectedOptions);
-    if (format === "json") {
-      const jsonData = JSON.stringify(filteredData);
-      const element = document.createElement("a");
-      const file = new Blob([jsonData], { type: "application/json" });
-      element.href = URL.createObjectURL(file);
-      element.download = "data.json";
-      document.body.appendChild(element);
-      element.click();
-      document.body.removeChild(element);
-    } else if (format === "csv") {
-      const csvContent = [
-        Object.keys(filteredData[0]).join(","),
-        ...filteredData.map((item) => Object.values(item).join(",")),
-      ].join("\n");
-      const element = document.createElement("a");
-      const file = new Blob([csvContent], { type: "text/csv" });
-      element.href = URL.createObjectURL(file);
-      element.download = "data.csv";
-      document.body.appendChild(element);
-      element.click();
-      document.body.removeChild(element);
-    }
+    const content =
+      format === "json"
+        ? JSON.stringify(filteredData)
+        : [
+            Object.keys(filteredData[0]).join(","),
+            ...filteredData.map((item) => Object.values(item).join(",")),
+          ].join("\n");
+          
+    const element = document.createElement("a");
+    const file = new Blob([content], {
+      type: format === "json" ? "application/json" : "text/csv",
+    });
+    element.href = URL.createObjectURL(file);
+    element.download = `data.${format}`;
+    document.body.appendChild(element);
+    element.click();
+    document.body.removeChild(element);
   };
 
   const handleOptionChange = (event) => {
@@ -182,8 +177,9 @@ const BarCharts = () => {
   };
 
   const handleCloudDownloadClick = () => {
-    setIsDropdownOpen(!isDropdownOpen);
+    setIsDropdownOpen(prev => !prev);
   };
+  
 
   const updateData = (value) => {
     const filteredData = data.slice(-parseInt(value));
@@ -279,8 +275,7 @@ const BarCharts = () => {
             style={{ display: "none" }}
           />
           <label htmlFor="csv-file-inputs">
-            <StyledBox component="span"
-            >
+            <StyledBox component="span">
               <IconButton component="span" color="primary">
                 <FileUploadRoundedIcon />
               </IconButton>
